@@ -251,3 +251,49 @@
     - service: script.turn_on
       data:
         entity_id: script.panic
+##########################################################################################        
+##Doorbell Chime
+##########################################################################################      
+- alias: Turn off chime w/ alarm on
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    from: 'off'
+    to: 'on'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.doorbell_chime
+##########################################################################################      
+- alias: Turn on chime w/ alarm off
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    from: 'on'
+    to: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.doorbell_chime
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

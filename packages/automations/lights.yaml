@@ -39,24 +39,7 @@
     service: light.hue_activate_scene
     data:
       group_name: "Living room"
-      scene_name: "Beige"     
-##########################################################################################    
-- alias: turn on the kitchen lights w/ motion
-  trigger:
-    platform: state
-    entity_id: binary_sensor.kitchen     
-    to: 'on'
-  condition:
-    condition: and
-    conditions:
-      - condition: sun
-        after: sunset
-      - condition: state
-        entity_id: input_boolean.tracyhome
-        state: 'off'        
-  action:
-    service: scene.turn_on
-    entity_id: scene.kitchen_dim    
+      scene_name: "Beige"       
 ##########################################################################################    
 - alias: Turn off kitchen light 10 minutes after last movement
   trigger:
@@ -75,14 +58,14 @@
 ##########################################################################################
 - alias: Fade on livingroom lights
   trigger:
-    platform: sun
-    event: sunset
-    offset: '-00:15:00'
+    platform: numeric_state
+    entity_id: sensor.livingroom_ldr
+    above: 850
   condition:
     condition: and
     conditions:
      - condition: state
-       entity_id: 'input_boolean.homestatus'
+       entity_id: input_boolean.homestatus
        state: 'on'
      - condition: state
        entity_id: 'light.mantle_right'
@@ -118,24 +101,6 @@
 #                Basement Lights                     #
 ######################################################   
   
-##########################################################################################
-- alias: turn on the basement lights w/ motion or door
-  trigger:
-    platform: state
-    entity_id: binary_sensor.basement, binary_sensor.basement_door      
-    to: 'on'
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: sun.sun
-        state: 'below_horizon'
-      - condition: state
-        entity_id: light.basement_lights
-        state: 'off'        
-  action:
-    service: scene.turn_on
-    entity_id: scene.basement_dim
 ##########################################################################################    
 - alias: Turn off basement light 15 minutes after last movement
   trigger:
@@ -177,31 +142,6 @@
     service: script.lightsoff
 ########################################################################################## 
 ######################################################
-#                 Alcove light                       #
-######################################################
-- alias: Media player playing
-  trigger:
-    platform: state
-    entity_id: media_player.stellar_cartography
-    to: 'playing'
-  condition:
-    condition: state
-    entity_id: sun.sun
-    state: 'below_horizon'
-  action:
-    service: switch.turn_off
-    entity_id: switch.front_alcove 
-##########################################################################################
-- alias: Turn on alcove at sunset
-  trigger:
-    platform: state
-    entity_id: sun.sun
-    to: 'below_horizon'
-  action:
-    service: switch.turn_on
-    entity_id: switch.front_alcove   
-########################################################################################## 
-######################################################
 #                 Octoprint light automation         #
 ######################################################
 - alias: Turn on light while printing
@@ -220,3 +160,52 @@
   action:
     service: switch.turn_off
     entity_id: switch.workshop        
+######################################################
+#                 Hall light automation              #
+######################################################    
+- alias: Turn on hall light at night
+  trigger:
+    platform: sun
+    event: sunset
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.stellar
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.homestatus
+        state: 'on'     
+  action:
+    - service: switch.turn_on
+      entity_id: switch.stair_alcove
+    - service: switch.turn_on
+      entity_id: switch.front_alcove
+##########################################################################################
+- alias: Media Turn off hall lights if livingroom on
+  trigger:
+    platform: state
+    entity_id: group.stellar
+    to: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.stair_alcove
+    - service: switch.turn_off
+      entity_id: switch.front_alcove
+##########################################################################################
+- alias: Media Turn on hall lights if livingroom off
+  trigger:
+    platform: state
+    entity_id: group.stellar
+    to: 'off'
+  condition:  
+    condition: sun
+    after: sunset  
+  action:
+    - service: switch.turn_on
+      entity_id: switch.stair_alcove
+    - service: switch.turn_on
+      entity_id: switch.front_alcove    
+    
+    
+    

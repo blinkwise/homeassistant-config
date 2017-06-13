@@ -347,18 +347,26 @@
       message: >
         It will take {{ states("sensor.evening_commute_rory") }} minutes to get home.
 ########################################################################################## 
- 
 - alias: Doorbell Notification
   initial_state: 'on'
   trigger:
     platform: mqtt
     topic: doorbell/ring
   action:
-    service: notify.smsboth
-    data:
-      title: "Doorbell"
-      message: "Someone is at the Door!"
-      
+    - service: notify.smsboth
+      data:
+        title: "Doorbell"
+        message: "Someone is at the Door!"
+    - condition: state
+      entity_id: input_boolean.homestatus
+      state: 'on'
+    - service: light.turn_on
+      data:
+        entity_id: group.huelights
+        flash: short
+    - service: light.turn_on
+      entity_id: light.front_entrence
+##########################################################################################       
 - alias: Notify If New Devices
   initial_state: 'on'
   trigger:

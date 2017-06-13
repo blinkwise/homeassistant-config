@@ -32,8 +32,6 @@
     platform: state
     entity_id: group.mancave
     to: 'off'
-    for: 
-      minutes: 10
   action: 
     - service: homeassistant.turn_off
       entity_id: input_boolean.mancave
@@ -64,6 +62,9 @@
       - condition: state
         entity_id: input_boolean.mancave
         state: 'on'
+      - condition: numeric_state
+        entity_id: sensor.dark_sky_temperature
+        above: 65
   action:
     - service: climate.set_temperature
       data:
@@ -85,6 +86,9 @@
       - condition: numeric_state
         entity_id: sensor.mancave_temperature 
         below: 73
+      - condition: numeric_state
+        entity_id: sensor.dark_sky_temperature
+        above: 65
   action:
     service: climate.SET_HOLD_MODE
     data:

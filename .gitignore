@@ -68,5 +68,8 @@ deps
 tts
 www
 icloud
+ios.conf
+.spotify-token-cache
+
 
 

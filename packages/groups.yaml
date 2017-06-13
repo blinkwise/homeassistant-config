@@ -236,7 +236,36 @@
       - sensor.Mancave_ldr  
       - sensor.Mancave_pir  
       - light.Mancave_led
-       
+  huelights:
+    name: huelights
+    entities:
+      - light.hall_3
+      - light.hall_4
+      - light.ladycave_1
+      - light.ladycave_2
+      - light.lightsaber
+      - light.man_cave_1
+      - light.man_cave_2
+      - light.mantle_center
+      - light.mantle_left
+      - light.mantle_right
+      - light.reading_room
+      - light.reading_room_2
+      - light.rory_bed
+      - light.subwoofer
+      - light.tracy_bed
+      - light.tripod
+      - light.tv
+  livingroomlights:
+    name: livingroomlights
+    entities:
+      - light.hall_3
+      - light.hall_4
+      - light.mantle_center
+      - light.mantle_left
+      - light.mantle_right
+      - light.subwoofer
+      - light.tv       
       
       
       

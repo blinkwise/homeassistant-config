@@ -1,0 +1,68 @@
+######################################################
+#                 Ecobee                             #
+######################################################
+##########################################################################################
+- alias: home comfort home
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    to: 'on'
+  action: 
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'home'
+    - service: notify.sms
+      data:
+        message: 'Ecobee set to home'         
+##########################################################################################
+- alias: home comfort away
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    to: 'off'
+  action: 
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'away'
+    - service: notify.sms
+      data:
+        message: 'Ecobee set to away'        
+##########################################################################################
+- alias: home comfort AC
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.dark_sky_temperature
+    above: 65
+  action: 
+    - service: climate.SET_OPERATION_MODE
+      entity_id: climate.lifesupport
+      data:
+        operation_mode: 'cool'
+    - service: notify.sms
+      data:
+        message: 'Ecobee set to cool'        
+##########################################################################################
+- alias: home comfort heat
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.dark_sky_temperature
+    below: 65
+  action: 
+    - service: climate.SET_OPERATION_MODE
+      entity_id: climate.lifesupport
+      data:
+        operation_mode: 'heat'
+    - service: notify.sms
+      data:
+        message: 'Ecobee set to heat'        
+        
+        
+        
+        
+        
+        
+        
+        
+  
