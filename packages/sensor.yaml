@@ -74,7 +74,7 @@
     value_template: '{{ value_json.temperature | round(1) }}'
 ####################################################################################
   - platform: darksky
-    api_key: 0622919d027c5d00aeb5718f5a87fb0c
+    api_key: !secret darkskiapi
     forecast array: 3
     monitored_conditions:
       - summary
@@ -91,7 +91,7 @@
       - wind_bearing
       - icon
   - platform: plex
-    host: 192.168.0.114  
+    host: !secret plexhost  
   - platform: mqtt
     state_topic: "wallpanel/mywallpanel/sensor/battery"
     name: "wallpanel battery"
@@ -100,14 +100,14 @@
 
   - platform: google_travel_time
     name: Morning Commute Rory
-    api_key: AIzaSyB-8T1DI8jNRu94_zQ1Yjx4YaSfFjgYX30
+    api_key: !secret googletravelapi
     origin: zone.home 
-    destination: 39.252636, -84.452476  
+    destination: !secret worklocation  
       
   - platform: google_travel_time
     name: Evening Commute Rory
-    api_key: AIzaSyB-8T1DI8jNRu94_zQ1Yjx4YaSfFjgYX30
-    origin: 39.252636, -84.452476
+    api_key: !secret googletravelapi
+    origin: !secret worklocation
     destination: zone.home
   
   - platform: octoprint
@@ -153,7 +153,7 @@
     
   - platform: rest
     name: pollen
-    resource: https://www.pollen.com/api/forecast/current/pollen/41015
+    resource: !secret pollenresource
     value_template: "{{value_json.Location.periods[1].Index}}"
     scan_interval: 21600
     headers:

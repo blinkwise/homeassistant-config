@@ -72,7 +72,7 @@ input_boolean: !include packages/inputboolean.yaml
 remote:
   - platform: harmony
     name: Harmony
-    host: 192.168.0.101
+    host: !secret harmonyhost
 
 notify:
   - name: sms
@@ -85,7 +85,7 @@ notify:
     username: !secret notifyusername
     password: !secret notifypassword
     recipient:
-      - !sectret rorytext
+      - !secret rorytext
     sender_name: My Home Assistant
   - name: smsboth
     platform: smtp
@@ -97,20 +97,20 @@ notify:
     username: !secret notifyusername
     password: !secret notifypassword
     recipient:
-      - !sectret rorytext
-      - !sectret tracytext
+      - !secret rorytext
+      - !secret tracytext
     sender_name: My Home Assistant 
   - name: smsdad
     platform: smtp
     server: smtp.gmail.com
     port: 587
     timeout: 15
-    sender:!secret notifysender
+    sender: !secret notifysender
     starttls: true
     username: !secret notifyusername
     password: !secret notifypassword
     recipient:
-      - !sectret dadtext
+      - !secret dadtext
     sender_name: My Home Assistant    
 
 ###################################################
@@ -205,7 +205,7 @@ device_tracker:
 ###################################################
 # Ecobee
 ecobee:
-  api_key: 6RMVoSkdghk9xdRtSoyZhyW0o4ujYuvo
+  api_key: !secret ecobeeapi
   
 media_player:
   - platform: plex
@@ -214,15 +214,15 @@ media_player:
 ios:
 
 lutron_caseta:
-    host: 192.168.0.121
+    host: !secret lutronhost
     
 envisalink:
-  host: 192.168.0.118
-  panel_type: HONEYWELL
-  user_name: user
-  password: user
-  code: '1127'
-  port: 4025
+  host: !secret alarmhost
+  panel_type: !secret alarmtype 
+  user_name: !secret alarmusername
+  password: !secret alarmpassword
+  code: !secret alarmcode
+  port: !secret alarmport
   evl_version: 4
   keepalive_interval: 60
   zonedump_interval: 15
@@ -269,7 +269,7 @@ switch:  !include packages/switches.yaml
 
 camera:
   - platform: mjpeg
-    mjpeg_url: http://192.168.0.107:8080/?action=stream 
+    mjpeg_url: !secret octomjpeg_url
     name: Replicator
 
 

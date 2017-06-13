@@ -43,7 +43,7 @@
     - service: alarm_control_panel.alarm_arm_home
       entity_id: alarm_control_panel.sentinel
       data: 
-        code: 1127
+        code: !secret alarmcode
 ##########################################################################################
 - alias: disarm boolean when disarmed
   trigger:
@@ -55,7 +55,7 @@
     - service: alarm_control_panel.alarm_disarm
       entity_id: alarm_control_panel.sentinel
       data: 
-        code: 1127
+        code: !secret alarmcode
 ##########################################################################################
 ##########################################################################################      
 ######## IOS notifications for alarm     
