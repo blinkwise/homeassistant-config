@@ -1,0 +1,75 @@
+2017-06-13 10:00:29 ERROR (Thread-5) [homeassistant.components.device_tracker.tplink] Couldn't fetch auth tokens! Response was: <Script language=JavaScript>
+var errorCode = 501;
+var errorNote = "<p>File not found</p>";
+var homeSite = "http://192.168.0.1";
+</script>
+<HTML>
+<HEAD>
+<TITLE>Error</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+<DIV style="padding:0px 30px;">
+<script type="text/javascript">
+function goHome()
+{
+	window.parent.location.href = homeSite;
+}
+document.write("<h1>" + errorCode +"</h1><hr>");
+document.write(errorNote);
+</script>
+<p><a href="#" onClick="goHome()">Go Home</a></p>
+</DIV>
+</BODY>
+</HTML>
+2017-06-13 10:00:29 ERROR (Thread-5) [homeassistant.components.device_tracker.tplink] Router didn't respond with JSON. Check if credentials are correct
+2017-06-13 10:00:33 ERROR (MainThread) [homeassistant.components.media_player] Error while setting up platform plex
+Traceback (most recent call last):
+  File "/srv/homeassistant/lib/python3.4/site-packages/homeassistant/helpers/entity_component.py", line 160, in _async_setup_platform
+    SLOW_SETUP_MAX_WAIT, loop=self.hass.loop)
+  File "/usr/lib/python3.4/asyncio/tasks.py", line 372, in wait_for
+    return fut.result()
+  File "/usr/lib/python3.4/asyncio/futures.py", line 277, in result
+    raise self._exception
+  File "/usr/lib/python3.4/concurrent/futures/thread.py", line 54, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/homeassistant/.homeassistant/custom_components/media_player/plex.py", line 81, in setup_platform
+    file_config = config_from_file(hass.config.path(PLEX_CONFIG_FILE))
+  File "/home/homeassistant/.homeassistant/custom_components/media_player/plex.py", line 69, in config_from_file
+    return json.loads(fdesc.read())
+  File "/usr/lib/python3.4/json/__init__.py", line 318, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.4/json/decoder.py", line 343, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.4/json/decoder.py", line 361, in raw_decode
+    raise ValueError(errmsg("Expecting value", s, err.value)) from None
+ValueError: Expecting value: line 1 column 1 (char 0)
+2017-06-13 10:00:37 WARNING (MainThread) [homeassistant.setup] Setup of remote is taking over 10 seconds.
+2017-06-13 10:00:42 WARNING (MainThread) [homeassistant.components.remote] Setup of platform harmony is taking over 10 seconds.
+2017-06-13 10:01:07 WARNING (Thread-6) [netdisco.ssdp] Error fetching description at 192.168.0.113
+2017-06-13 10:01:07 WARNING (Thread-6) [netdisco.ssdp] Error fetching description at 192.168.0.114
+2017-06-13 10:01:13 WARNING (Thread-6) [netdisco.ssdp] Error fetching description at http://192.168.0.116:80/Canon_basic.xml
+2017-06-13 10:01:17 ERROR (MainThread) [homeassistant.components.media_player] Error while setting up platform plex
+Traceback (most recent call last):
+  File "/srv/homeassistant/lib/python3.4/site-packages/homeassistant/helpers/entity_component.py", line 160, in _async_setup_platform
+    SLOW_SETUP_MAX_WAIT, loop=self.hass.loop)
+  File "/usr/lib/python3.4/asyncio/tasks.py", line 372, in wait_for
+    return fut.result()
+  File "/usr/lib/python3.4/asyncio/futures.py", line 277, in result
+    raise self._exception
+  File "/usr/lib/python3.4/concurrent/futures/thread.py", line 54, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/homeassistant/.homeassistant/custom_components/media_player/plex.py", line 81, in setup_platform
+    file_config = config_from_file(hass.config.path(PLEX_CONFIG_FILE))
+  File "/home/homeassistant/.homeassistant/custom_components/media_player/plex.py", line 69, in config_from_file
+    return json.loads(fdesc.read())
+  File "/usr/lib/python3.4/json/__init__.py", line 318, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.4/json/decoder.py", line 343, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.4/json/decoder.py", line 361, in raw_decode
+    raise ValueError(errmsg("Expecting value", s, err.value)) from None
+ValueError: Expecting value: line 1 column 1 (char 0)
+2017-06-13 10:01:27 WARNING (MainThread) [homeassistant.setup] Setup of wemo is taking over 10 seconds.
+2017-06-13 10:01:27 WARNING (Thread-1) [pywemo.ssdp] Error fetching description at http://192.168.0.116:80/Canon_basic.xml
+2017-06-13 10:18:49 WARNING (Thread-9) [pyecobee] Error connecting to Ecobee while attempting to get thermostat data.  Refreshing tokens and trying again.

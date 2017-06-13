@@ -1,0 +1,16 @@
+  radarr:
+    title: 'Radarr'
+    icon: 'mdi:radar'
+    url: 'https://blinkwise.duckdns.org:9898/'
+  sonarr:
+    title: 'Sonarr'
+    icon: 'mdi:television'
+    url: 'https://blinkwise.duckdns.org:9899/'
+  sabnzb:
+    title: 'SABnzb'
+    icon: 'mdi:cloud-download'
+    url: 'https://blinkwise.duckdns.org:9090/'
+  plex:
+    title: 'Plex'
+    icon: 'mdi:cloud-upload'
+    url: 'https://blinkwise.duckdns.org:32400/'

@@ -1,0 +1,42 @@
+  - name: kitchen dim
+    entities:
+        light.kitchen:
+            state: on
+            transition: 2
+            brightness: 75
+            
+  - name: basement dim
+    entities:
+        light.basement_lights:
+            state: on
+            transition: 2
+            brightness: 75
+  - name: livingroom fadeon
+    entities:
+        light.mantle_center:
+            state: on
+            rgb_color: 190,122,54
+            transition: 900
+            brightness: 255
+        light.mantle_left:
+            state: on
+            rgb_color: 190,122,54
+            transition: 900
+            brightness: 255
+        light.mantle_right:
+            state: on
+            rgb_color: 190,122,54
+            transition: 900
+            brightness: 255
+        light.subwoofer:
+            state: on
+            rgb_color: 190,122,54
+            transition: 900
+            brightness: 255
+        light.tv:
+            state: on
+            rgb_color: 190,122,54
+            transition: 900
+            brightness: 255
+ 
+ 

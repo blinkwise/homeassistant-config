@@ -1,0 +1,222 @@
+######################################################
+#                 Arriving Home                      #
+######################################################
+
+##########################################################################################
+- alias: turn on the kitchen lights
+  trigger:
+    platform: state
+    entity_id: input_boolean.roryhome
+    from: 'off'
+    to: 'on'            
+  action:
+    service: light.turn_on
+    entity_id: light.kitchen
+##########################################################################################
+- alias: turn on the kitchen lights tracy
+  trigger:
+    platform: state
+    entity_id: input_boolean.tracyhome
+    from: 'off'
+    to: 'on'      
+  condition:
+    condition: sun
+    after: sunset    
+  action:
+    service: light.turn_on
+    entity_id: light.kitchen
+##########################################################################################    
+- alias: turn on the livingroom lights when home
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    from: 'off'
+    to: 'on'      
+  condition:
+    condition: sun
+    after: sunset  
+  action:
+    service: light.hue_activate_scene
+    data:
+      group_name: "Living room"
+      scene_name: "Beige"     
+##########################################################################################    
+- alias: turn on the kitchen lights w/ motion
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen     
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: state
+        entity_id: input_boolean.tracyhome
+        state: 'off'        
+  action:
+    service: scene.turn_on
+    entity_id: scene.kitchen_dim    
+##########################################################################################    
+- alias: Turn off kitchen light 10 minutes after last movement
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen
+    to: 'off'
+    for:
+      minutes: 10
+  action:
+    service: light.turn_off
+    entity_id: light.kitchen  
+##########################################################################################
+######################################################
+#                 Livingroom Lights                  #
+######################################################
+##########################################################################################
+- alias: Fade on livingroom lights
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:15:00'
+  condition:
+    condition: and
+    conditions:
+     - condition: state
+       entity_id: 'input_boolean.homestatus'
+       state: 'on'
+     - condition: state
+       entity_id: 'light.mantle_right'
+       state: 'off'
+  action:
+    service: scene.turn_on
+    entity_id: scene.livingroom_fadeon
+##########################################################################################
+######################################################
+#                 Outside Lights                     #
+######################################################
+##########################################################################################
+- alias: turn on front porch lights
+  trigger:
+    platform: state
+    entity_id: input_boolean.roryhome, input_boolean.tracyhome
+    from: 'off'
+    to: 'on'      
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.front_porch
+        state: 'off'
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'      
+  action:
+    service: light.turn_on
+    entity_id: light.front_porch
+##########################################################################################
+######################################################
+#                Basement Lights                     #
+######################################################   
+  
+##########################################################################################
+- alias: turn on the basement lights w/ motion or door
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement, binary_sensor.basement_door      
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: light.basement_lights
+        state: 'off'        
+  action:
+    service: scene.turn_on
+    entity_id: scene.basement_dim
+##########################################################################################    
+- alias: Turn off basement light 15 minutes after last movement
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement
+    to: 'off'
+    for:
+      minutes: 15
+  action:
+    service: light.turn_off
+    entity_id: light.basement_lights      
+##########################################################################################
+##########################################################################################    
+- alias: Turn off basement light 3 minutes after door closed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_door 
+    to: 'off'
+    for:
+      minutes: 3
+  condition:
+    condition: state
+    entity_id: binary_sensor.basement
+    state: 'off'    
+  action:
+    service: light.turn_off
+    entity_id: light.basement_lights      
+######################################################
+#                 Turn Off all lights                #
+######################################################
+##########################################################################################      
+- alias: Turn off Lights when everyone leaves
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    from: 'on'
+    to: 'off'         
+  action:
+    service: script.lightsoff
+########################################################################################## 
+######################################################
+#                 Alcove light                       #
+######################################################
+- alias: Media player playing
+  trigger:
+    platform: state
+    entity_id: media_player.stellar_cartography
+    to: 'playing'
+  condition:
+    condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
+  action:
+    service: switch.turn_off
+    entity_id: switch.front_alcove 
+##########################################################################################
+- alias: Turn on alcove at sunset
+  trigger:
+    platform: state
+    entity_id: sun.sun
+    to: 'below_horizon'
+  action:
+    service: switch.turn_on
+    entity_id: switch.front_alcove   
+########################################################################################## 
+######################################################
+#                 Octoprint light automation         #
+######################################################
+- alias: Turn on light while printing
+  trigger:
+    platform: state
+    entity_id: sensor.octoprint_current_state
+    to: 'Printing'
+  action:
+    service: switch.turn_on
+    entity_id: switch.workshop
+- alias: Turn off light while printing
+  trigger:
+    platform: state
+    entity_id: sensor.octoprint_current_state
+    to: 'Operational'
+  action:
+    service: switch.turn_off
+    entity_id: switch.workshop        

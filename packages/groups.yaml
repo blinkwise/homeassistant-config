@@ -1,0 +1,250 @@
+###################################################
+#                    Home Page                    #
+###################################################
+
+  default_view: 
+    view: yes
+    entities: 
+      - group.sentinel
+      - group.family_view
+      - group.lightpanel 
+      - group.planetary
+      - group.lifesupport
+      - group.mainframe
+###################################################
+#                    Views                        #
+###################################################
+  Office-Mancave_view:
+    view: yes
+    name: Man Cave
+    entities:
+      - group.mancave
+      - group.mancave_scenes
+      - group.sensor_node_1_card
+      - input_boolean.mancave
+  Office-Tracy_view:
+    view: yes
+    name: Lady Lair
+    entities:
+      - group.ladylair
+  Livingroom_view:
+    view: yes
+    name: Living Room
+    entities:
+      - group.stellar
+      - group.livingroom_scenes 
+  Brandtly_view:
+    view: yes
+    name: Home 
+    entities:
+      - group.brandtly
+      - switch.doorbell_chime
+  Bedroom_view:
+    view: yes
+    name: Bedroom
+    entities:
+      - group.bedroom
+  Workshop_view:
+    name: Workshop
+    view: yes
+    entities: 
+      - group.workshop
+      - camera.replicator
+      - group.workshop_switches
+  Control_view:
+    name: Control
+    view: yes
+    entities:
+      - group.all_automations
+      - group.all_devices
+      - group.all_lights
+      - group.all_scripts
+      - group.all_switches
+  Alarm_View:
+    name: Sentinel
+    view: yes
+    entities:
+      - group.alarmcard
+     
+###################################################
+#                    Groups                       #
+###################################################      
+  mancave:
+    name: Mancave
+    entities:
+      - light.man_cave_1
+      - light.man_cave_2
+      - light.lightsaber
+  mancave_scenes:
+    name: Mancave Scenes
+    entities:
+      - script.fireandice
+      - script.magicians
+      - script.twentyfour
+      - script.voyager
+  ladylair:
+    name: Lady Lair
+    entities:
+      - light.ladycave_1
+      - light.ladycave_2
+  stellar:
+    name: Stellar Cartography
+    entities:
+      - media_player.stellar_cartography
+      - remote.harmony
+      - configurator.plex_media_server
+      - light.mantle_center
+      - light.hall_3
+      - light.hall_4
+      - light.mantle_left
+      - light.mantle_right
+      - light.subwoofer
+      - light.tv
+      - switch.fireplace
+      - sensor.Livingroom_temperature  
+      - sensor.Livingroom_humidity  
+      - sensor.Livingroom_ldr  
+  livingroom_scenes:
+    name: Livingroom Scenes
+    entities:
+      - script.arrow
+      - script.flash
+      - script.gothem
+      - script.horror
+      - script.space
+      - script.supergirl
+      - script.tracy
+      - script.whodey
+      - script.beige
+      - script.christmas
+      - script.dragonball
+      - script.tron
+  bedroom:
+    name: Statis Chamber 1
+    entities:
+      - light.tripod
+      - light.rory_bed
+      - light.tracy_bed
+      - sensor.bedroom_temperature
+  planetary:
+    name: Planetary Conditions
+    entities:
+      - sun.sun
+      - sensor.dark_sky_temperature
+      - sensor.dark_sky_apparent_temperature
+      - sensor.dark_sky_daily_high_temperature
+      - sensor.dark_sky_daily_low_temperature
+      - sensor.dark_sky_humidity
+      - sensor.dark_sky_precip_probability
+      - sensor.dark_sky_hourly_summary
+      - sensor.pollen_level
+  lifesupport:
+    name: Life Support
+    control: hidden
+    entities:
+      - climate.lifesupport
+      - sensor.lifesupport_temperature
+      - sensor.target_temp
+      - sensor.Mancave_temperature
+      - sensor.Mainframe_temperature
+      - sensor.Livingroom_temperature
+      - sensor.lifesupport_humidity   
+      - sensor.Mancave_humidity     
+      - sensor.Mainframe_humidity   
+      - sensor.Livingroom_humidity  
+  lightpanel:
+    name: Light Panel
+    entities: 
+      - group.bedroom
+      - group.livingroom
+      - group.ladylair
+      - group.mancave
+      - group.brandtly
+      - switch.front_alcove
+  brandtly:
+    name: Home
+    entities:
+      - light.front_porch
+      - light.front_entrence
+      - light.basement_lights
+      - light.back_flood_light
+      - light.kitchen
+      - sensor.holocron
+  family_view:
+    control: hidden
+    name: Family
+    entities:
+      - input_boolean.roryhome
+      - input_boolean.tracyhome
+      - input_boolean.homestatus
+      - input_boolean.alarmstatus
+#      - device_tracker.tracysapplewatch
+#      - device_tracker.rorysapplewatch
+  sentinel:
+    name: Sentinel
+    entities:
+      - alarm_control_panel.sentinel
+  alarmcard:
+    name: Sentinel Alarm_View
+    entities:
+      - alarm_control_panel.sentinel
+      - binary_sensor.basement
+      - binary_sensor.basement_door
+      - binary_sensor.basement_window
+      - binary_sensor.deck_door
+      - binary_sensor.front_door
+      - binary_sensor.front_entrance
+      - binary_sensor.garage_door
+      - binary_sensor.kitchen
+      - binary_sensor.livingroom
+      - binary_sensor.motion
+      - binary_sensor.bedroom_occupancy
+  workshop:
+    name: Workshop
+    entities:
+      - binary_sensor.octoprint_printing
+      - binary_sensor.octoprint_printing_error
+      - sensor.bed
+      - sensor.bed_target
+      - sensor.hotend
+      - sensor.hotend_target
+      - sensor.octoprint_current_state
+      - sensor.octoprint_job_percentage
+      
+  workshop_switches:
+    name: Workshop Switches
+    entities:
+      - switch.workshop
+      - switch.arc_generator
+  mainframe:
+    name: Mainframe
+    entities:
+      - sensor.speedtest_download
+      - sensor.speedtest_ping
+      - sensor.speedtest_upload
+      - sensor.pihole_ads_blocked_today
+      - sensor.disk_use_
+      - sensor.Mainframe_temperature  
+      - sensor.Mainframe_ldr  
+      - sensor.Mainframe_pir  
+      
+  sensor_node_1_card:  
+    name: Mancave Sentinel 
+    entities:  
+      - sensor.Mancave_temperature  
+      - sensor.Mancave_humidity  
+      - sensor.Mancave_ldr  
+      - sensor.Mancave_pir  
+      - light.Mancave_led
+       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+     

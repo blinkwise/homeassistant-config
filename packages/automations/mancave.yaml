@@ -1,0 +1,101 @@
+######################################################
+#                 Mancave Lights                     #
+######################################################
+
+##########################################################################################
+- alias: turn on the mancave lights
+  trigger:
+    platform: state
+    entity_id: input_boolean.mancave
+    from: 'off'
+    to: 'on'            
+  action:
+    service: light.turn_on
+    entity_id: group.mancave
+##########################################################################################    
+- alias: mancave home
+  trigger:
+    platform: state
+    entity_id: sensor.mancave_pir
+    from: 'standby'
+    to: 'motion detected'
+  condition:
+    condition: state
+    entity_id: input_boolean.roryhome
+    state: 'on'  
+  action: 
+    service: homeassistant.turn_on
+    entity_id: input_boolean.mancave 
+##########################################################################################
+- alias: mancave away
+  trigger:
+    platform: state
+    entity_id: group.mancave
+    to: 'off'
+    for: 
+      minutes: 10
+  action: 
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.mancave
+    - service: notify.sms
+      data:
+        message: 'Mancave set to away'
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'home'        
+##########################################################################################
+- alias: mancave comfort
+  trigger:
+    - platform: time
+    # You can also match on interval. This will match every 5 minutes
+      minutes: '/5'
+      seconds: 00
+    - platform: state
+      entity_id: input_boolean.mancave
+      from: 'off'
+      to: 'on'            
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.mancave_temperature 
+        above: 73
+      - condition: state
+        entity_id: input_boolean.mancave
+        state: 'on'
+  action:
+    - service: climate.set_temperature
+      data:
+        temperature: 65
+##########################################################################################
+- alias: mancave comfort off
+  trigger:
+    - platform: time
+    # You can also match on interval. This will match every 5 minutes
+      minutes: '/5'
+      seconds: 00
+    - platform: state
+      entity_id: input_boolean.mancave
+      from: 'on'
+      to: 'off' 
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.mancave_temperature 
+        below: 73
+  action:
+    service: climate.SET_HOLD_MODE
+    data:
+      hold_mode: home
+
+        
+        
+        
+        
+        
+        
+        
+        
+  

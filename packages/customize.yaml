@@ -1,0 +1,129 @@
+# Add an entry for each entity that you want to overwrite.
+    switch.christmas_lights:
+      friendly_name: Wemo Switch
+      entity_picture: /local/wemo.jpg
+    climate.lifesupport:
+      friendly_name: Life Support
+      entity_picture: /local/lifesupport.png
+    sensor.lifesupport_humidity:
+      friendly_name: Humidity
+      entity_picture: /local/humid.png
+    sensor.lifesupport_temperature:
+      friendly_name: Temperature
+      entity_picture: /local/temperature.png
+    sensor.dark_sky_temperature:
+      friendly_name: Temperature
+    sensor.dark_sky_apparent_temperature:
+      friendly_name: Feels like
+    sensor.dark_sky_daily_high_temperature:
+      friendly_name: High
+    sensor.dark_sky_daily_low_temperature:
+      friendly_name: Low
+    sensor.dark_sky_humidity:
+      friendly_name: Humidity
+    sensor.dark_sky_precip_probability:
+      friendly_name: Chance of rain
+    sensor.dark_sky_hourly_summary:
+      friendly_name: Daily Forcast
+    device_tracker.tracysapplewatch:
+      friendly_name: Tracy's Watch
+      entity_picture: /local/tracywatch.png
+    device_tracker.rorysapplewatch:
+      friendly_name: Rory's Watch
+      entity_picture: /local/rorywatch.png
+    input_boolean.roryhome:
+      friendly_name: Rory Home
+      entity_picture: /local/rory.jpg
+    input_boolean.tracyhome:
+      friendly_name: Tracy Home
+      entity_picture: /local/tracy.jpg
+    script.fireandice:
+      friendly_name: Fire & Ice
+      entity_picture: /local/fireandice.jpg
+    script.magicians:
+      friendly_name: Magicians
+      entity_picture: /local/magicians.png
+    script.twentyfour:
+      friendly_name: '24'
+      entity_picture: /local/24.jpg
+    script.voyager:
+      friendly_name: Voyager
+      entity_picture: /local/voyager.jpg  
+    script.arrow:
+      friendly_name: Arrow
+      entity_picture: /local/arrow.jpg  
+    script.flash:
+      friendly_name: Flash
+      entity_picture: /local/flash.png   
+    script.gothem:
+      friendly_name: Gothem
+      entity_picture: /local/batman.png
+    script.horror:
+      friendly_name: Horror
+      entity_picture: /local/horror.png   
+    script.space:
+      friendly_name: Space
+      entity_picture: /local/space.png 
+    script.supergirl:
+      friendly_name: Supergirl
+      entity_picture: /local/supergirl.png  
+    script.tracy:
+      friendly_name: Tracy
+      entity_picture: /local/t.png
+    script.whodey:
+      friendly_name: Who Dey
+      entity_picture: /local/whodey.png     
+    script.beige:
+      friendly_name: Beige
+      entity_picture: /local/beige.png      
+    script.christmas:
+      friendly_name: Christmas
+      entity_picture: /local/christmas.png 
+    script.dragonball:
+      friendly_name: Dragonball
+      entity_picture: /local/dragonball.png
+    script.tron:
+      friendly_name: Tron
+      entity_picture: /local/tron.jpg
+    switch.fireplace:
+      freindly_name: Fireplace
+      entity_picture: /local/fireplace.png      
+    zone.home:
+      beacon:
+        uuid: c9407f30-f5f8-466e-aff9-25556b57fe6d
+        major: 179
+        minor: 3 
+    sensor.dark_sky_icon:
+      hidden: true
+    sensor.dark_sky_precip_intensity:
+      hidden: true
+    sensor.dark_sky_pressure:
+      hidden: true
+    sensor.dark_sky_summary:
+      hidden: true
+    sensor.dark_sky_wind_bearing:
+      hidden: true
+    sensor.dark_sky_wind_speed:
+      hidden: true
+    sensor.iphone_battery_state:
+      hidden: true
+    light.hgrp0241172480:
+      hidden: true
+    light.huehalloweenactivelightsgroup:
+      hidden: true
+    light.huehalloweenactivelightsgroup_2:
+      hidden: true
+    light.sml:
+      hidden: true
+    group.all_automations:
+      hidden: false
+    group.all_devices:
+      hidden: false
+    group.all_lights:
+      hidden: false
+    group.all_scripts:
+      hidden: false
+    group.all_switches:
+      hidden: false
+      
+      

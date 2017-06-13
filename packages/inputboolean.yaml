@@ -1,0 +1,22 @@
+  roryhome:
+    name: Rory Moser
+    initial: off
+ 
+  tracyhome:
+    name: Tracy Henegar
+    initial: off
+    
+  homestatus:
+    name: Home Status
+    initial: on
+    #on means we are home, off means we are away
+    
+  alarmstatus:
+    name: Alarm Status
+    initial: off
+    #on means armed, off means disarmed
+    
+  mancave:
+    name: mancave
+    initial: off
+    #on means armed, off means disarmed

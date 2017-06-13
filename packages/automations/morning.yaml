@@ -1,0 +1,47 @@
+######################################################
+#                 Morning                            #
+######################################################
+##########################################################################################     
+- alias: Morning text pollen
+  trigger:
+    platform: time
+    at: '10:00:00'
+  condition:
+    condition: numeric_state
+    entity_id: sensor.pollen
+    above: 5
+  action:
+    - service: notify.dad
+      data:
+        message: 'Pollen count is high today!'
+##########################################################################################  
+- alias: Morning report 
+  trigger:
+    platform: time
+    at: '06:15:00'
+  action:
+    - service: notify.sms
+      data_template:
+        title: "."
+        message: "The High today is {{ states.sensor.dark_sky_daily_high_temperature.state }} F."
+    - service: notify.sms
+      data_template:
+        title: "."
+        message: "The low is {{ states.sensor.dark_sky_daily_low_temperature.state }} F."
+    - service: notify.sms
+      data_template:
+        title: "."
+        message: "The humidity level is {{ states.sensor.dark_sky_humidity.state }}%."
+    - service: notify.sms
+      data_template:
+        title: "."
+        message: "There is a {{ states.sensor.dark_sky_precip_probability.state }}% chance of rain."
+    - service: notify.sms
+      data_template:
+        title: "."
+        message: "The allergy level is {{ states.sensor.pollen_level.state }}."
+#    - service: notify.sms
+#      data_template:
+#        title: "."
+#        message: "You have to leave by {{ (as_timestamp(now.now()) - states.sensor.morning_commute_rory.attributes.duration.split(" ")[0] | int *60 ) | timestamp_custom("%Y-%m-%d %H:%M") }}"
+

@@ -1,0 +1,276 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 38.98262245118523
+  longitude: -84.49487848215223
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 226
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/New_York
+ ###################################################
+ #                 Customization                   #
+ ###################################################
+  customize_glob:
+      light.*:
+        custom_ui_state_card: custom_light
+           
+  customize: !include packages/customize.yaml
+    
+###################################################
+#                      Misc                       #
+###################################################
+  
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: tracyh32
+  # Uncomment this if you are using SSL or running in Docker etc
+  base_url: blinkwise.duckdns.org
+  ssl_certificate: /etc/letsencrypt/live/blinkwise.duckdns.org/fullchain.pem
+  ssl_key: /etc/letsencrypt/live/blinkwise.duckdns.org/privkey.pem
+  ip_ban_enabled: True
+  login_attempts_threshold: 5
+  trusted_networks:
+    - 127.0.0.1
+    - ::1
+    - 192.168.0.0/24
+    - 2001:DB8:ABCD::/48
+    
+panel_iframe: !include packages/iframe.yaml
+  
+    
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# View all events in a logbook
+logbook:
+
+scene: !include packages/scenes.yaml
+
+input_boolean: !include packages/inputboolean.yaml
+
+remote:
+  - platform: harmony
+    name: Harmony
+    host: 192.168.0.101
+
+notify:
+  - name: sms
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: rory.moser@gmail.com
+    starttls: true
+    username: rory.moser@gmail.com
+    password: dzvmemxbifvjuhwy
+    recipient:
+      - 8593915538@vtext.com
+    sender_name: My Home Assistant
+  - name: smsboth
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: rory.moser@gmail.com
+    starttls: true
+    username: rory.moser@gmail.com
+    password: dzvmemxbifvjuhwy
+    recipient:
+      - 8593915538@vtext.com
+      - 8594455378@txt.att.net
+    sender_name: My Home Assistant 
+  - name: smsdad
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: rory.moser@gmail.com
+    starttls: true
+    username: rory.moser@gmail.com
+    password: dzvmemxbifvjuhwy
+    recipient:
+      - 8592500635@vtext.com
+    sender_name: My Home Assistant    
+
+###################################################
+#                    Sensors                      #
+###################################################
+# Track the sun
+sun:
+
+# Weather Prediction
+sensor: !include packages/sensor.yaml
+    
+# Text to speech
+tts:
+  platform: google
+
+group: !include packages/groups.yaml
+automation:  !include_dir_merge_list packages/automations/
+###################################################
+#                    MQTT                         #
+###################################################
+octoprint:
+  host: octopi.local
+  api_key: 8A9635A66CC04CE3959241B6FC15191D
+  
+      
+recorder:
+  db_url: mysql://hass:PASSWORD@127.0.0.1/homeassistant?charset=utf8
+  purge_days: 3
+  
+mqtt:
+  broker: 192.168.0.109
+  port: 1883
+  client_id: home-assistant-1
+  username: username
+  password: tracyh32
+  keepalive: 60
+
+light:  
+  - platform: mqtt_json  
+    name: "Mancave LED"  
+    state_topic: "bruh/sensornodemancave"  
+    command_topic: "bruh/sensornodemancave/set"  
+    brightness: true  
+    flash: true  
+    rgb: true  
+    optimistic: false  
+    qos: 0 
+    
+  - platform: mqtt_json  
+    name: "Mainframe LED"  
+    state_topic: "bruh/sensornodemainframe"  
+    command_topic: "bruh/sensornodemainframe/set"  
+    brightness: true  
+    flash: true  
+    rgb: true  
+    optimistic: false  
+    qos: 0 
+    
+  - platform: hue
+    scan_interval: 5    
+  
+binary_sensor:
+  - platform: mqtt
+    state_topic: "wallpanel/mywallpanel/sensor/motion"
+    name: "Motion"
+    payload_on: '{"value":true}'
+    payload_off: '{"value":false}'
+    device_class: motion
+  - platform: octoprint
+    monitored_conditions:
+      - Printing
+      - Printing Error
+  
+###################################################
+#                    Trackers                     #
+###################################################
+#owntracks
+device_tracker:
+  - platform: owntracks
+  
+  - platform: tplink
+    host: 192.168.0.1
+    username: blinkwise
+    password: tracyh32
+    interval_seconds: 5
+    consider_home: 180
+    track_new_devices: yes
+
+  
+###################################################
+#                    Devices                      #
+###################################################
+# Ecobee
+ecobee:
+  api_key: 6RMVoSkdghk9xdRtSoyZhyW0o4ujYuvo
+  
+media_player:
+  - platform: plex
+    scan_interval: 1
+    
+ios:
+
+lutron_caseta:
+    host: 192.168.0.121
+    
+envisalink:
+  host: 192.168.0.118
+  panel_type: HONEYWELL
+  user_name: user
+  password: user
+  code: '1127'
+  port: 4025
+  evl_version: 4
+  keepalive_interval: 60
+  zonedump_interval: 15
+  panic_type: Police
+  zones:
+    02:
+      name: 'Front Entrance' 
+      type: 'motion'
+    03: 
+      name: 'Livingroom'
+      type: 'motion'
+    04:
+      name: 'basement'
+      type: 'motion'
+    05:
+      name: 'basement window'
+      type: 'opening'
+    09:
+      name: 'kitchen'
+      type: 'motion'
+    10:
+      name: 'Front Door'
+      type: 'opening'
+    11: 
+      name: 'Garage Door'
+      type: 'opening'
+    12:
+      name: 'Deck Door'
+      type: 'opening'
+    13:
+      name: 'Basement Door'
+      type: 'opening'
+    
+  partitions:
+    1:
+      name: 'Sentinel'
+    
+     
+###################################################
+#                    Scripts                      #
+###################################################    
+script:  !include packages/scripts.yaml
+switch:  !include packages/switches.yaml
+
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://192.168.0.107:8080/?action=stream 
+    name: Replicator
+
+
+

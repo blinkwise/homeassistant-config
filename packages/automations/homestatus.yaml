@@ -1,0 +1,374 @@
+######################################################
+#                 Initial Status                     #
+######################################################
+##########################################################################################
+- alias: Check status on reboot rory
+  trigger:
+    platform: homeassistant
+    event: start
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.rory
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.username_rory
+        state: 'not_home' 
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.roryhome
+    - service: logbook.log
+      data_template:
+        name: "Rory away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%}
+##########################################################################################
+- alias: Check status on reboot tracy away
+  trigger:
+    platform: homeassistant
+    event: start
+  condition:
+    condition: state
+    entity_id: device_tracker.tracy
+    state: 'not_home'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.tracyhome
+    - service: logbook.log
+      data_template:
+        name: "Tracy away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%} 
+##########################################################################################
+- alias: Check status on reboot home away
+  trigger:
+    platform: homeassistant
+    event: start
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.tracyhome
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.tracyhome
+        state: 'off'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.homestatus
+    - service: logbook.log
+      data_template:
+        name: "Home away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%} 
+##########################################################################################
+##########################################################################################
+- alias: Check status on reboot alarm away
+  trigger:
+    platform: homeassistant
+    event: start
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'         
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.alarmstatus
+##########################################################################################
+######################################################
+#                 Tracy Notify                       #
+######################################################
+##########################################################################################
+- alias: Flash Mancave when Tracy is home
+  trigger:
+    platform: state
+    entity_id: input_boolean.tracyhome
+    from: 'off'
+    to: 'on'      
+  condition:
+    condition: state
+    entity_id: input_boolean.roryhome
+    state: 'on'     
+  action:
+    service: light.turn_on
+    data:
+      entity_id: group.mancave
+      flash: long
+##########################################################################################  
+- alias: Notify when tracy gets home
+  trigger:
+    platform: state
+    entity_id: input_boolean.tracyhome
+    from: 'off'
+    to: 'on'
+  action:
+    service: notify.sms
+    data:
+      message: 'Tracy is now home'
+##########################################################################################
+- alias: Notify when tracy leaves
+  trigger:
+    platform: state
+    entity_id: input_boolean.tracyhome
+    from: 'on'
+    to: 'off'
+  action:
+    service: notify.sms
+    data:
+      message: 'Tracy left home'
+##########################################################################################      
+###############################################      
+#               Rory Home/Away                 #
+################################################
+##########################################################################################
+- alias: 'Rory Home'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.rory, device_tracker.username_rory
+      to: 'home'
+  condition:
+    condition: state
+    entity_id: input_boolean.roryhome
+    state: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.roryhome
+    - service: logbook.log
+      data_template:
+        name: "Rory home: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Home.
+          {%- endfor -%}
+##########################################################################################
+- alias: 'Rory Away'
+  initial_state: 'on'  
+  trigger:
+    - platform: state
+      entity_id: device_tracker.rory
+      to: 'not_home'
+      for: 
+        minutes: 10
+    - platform: state
+      entity_id: device_tracker.username_rory
+      to: 'not_home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.rory
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.username_rory
+        state: 'not_home'
+#      - condition: template
+#        value_template: >
+#          {%- if states.binary_sensor.garage_door.last_changed -%}
+#            {{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed)) < 1800 }}
+#          {%- else -%}
+#            true
+#          {%- endif -%}
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.roryhome
+    - service: logbook.log
+      data_template:
+        name: "Rory away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%}               
+##########################################################################################     
+################################################      
+#               Tracy Home/Away                #
+################################################
+##########################################################################################
+- alias: 'Tracy Home' 
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.tracy, device_tracker.username_tracy
+      to: 'home'
+  condition:
+    condition: state
+    entity_id: input_boolean.tracyhome
+    state: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.tracyhome
+    - service: logbook.log
+      data_template:
+        name: "Tracy home: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Home.
+          {%- endfor -%}
+##########################################################################################
+- alias: 'Tracy Away'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.tracy
+      to: 'not_home'
+      for: 
+        minutes: 10
+#    - condition: template
+#      value_template: >
+#        {%- if states.binary_sensor.garage_door.last_changed -%}
+#          {{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed)) < 1800 }}
+#        {%- else -%}
+#          true
+#        {%- endif -%}
+#    - platform: state
+#      entity_id: device_tracker.username_tracy
+#      state: 'not_home'
+#  condition:
+#    condition: and
+#    conditions:
+#      - condition: state
+#        entity_id: device_tracker.tracy
+#        state: 'not_home'
+#      - condition: state
+#        entity_id: device_tracker.username_tracy
+#        state: 'not_home'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.tracyhome
+    - service: logbook.log
+      data_template:
+        name: "Tracy away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%}  
+##########################################################################################          
+################################################      
+#               Home  Home/Away                #
+################################################
+- alias: 'Home Away'
+  initial_state: 'on'       
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tracyhome
+      to: 'off'
+    - platform: state
+      entity_id: input_boolean.roryhome
+      to: 'off'  
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.roryhome
+        state: 'off' 
+      - condition: state
+        entity_id: input_boolean.tracyhome
+        state: 'off' 
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.homestatus
+    - service: notify.sms
+      data:
+        message: 'Home Set to away'
+    - service: logbook.log
+      data_template:
+        name: "Home away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%} 
+##########################################################################################          
+- alias: 'Home Active'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tracyhome
+      to: 'on'
+    - platform: state
+      entity_id: input_boolean.roryhome
+      to: 'on' 
+  condition:
+    condition: state
+    entity_id: input_boolean.homestatus
+    state: 'off'     
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.homestatus
+    - service: notify.sms
+      data:
+        message: 'Home Set to home'
+    - service: logbook.log
+      data_template:
+        name: "Home Active: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%}         
+##########################################################################################
+################################################      
+#               Traffic Notify                 #
+################################################
+##########################################################################################
+- alias: 'Commute Home'
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '16:30:00'
+  condition:
+    condition: and
+    conditions:
+     - condition: time
+       after: '14:00:00'
+       before: '20:00:00'
+     - condition: time
+       weekday:
+         - mon
+         - tue
+         - wed
+         - thu
+         - fri
+     - condition: state
+       entity_id: input_boolean.roryhome
+       state: 'off'   
+  action:
+    service: notify.sms
+    data_template:
+      title: "Time to go!"
+      message: >
+        It will take {{ states("sensor.evening_commute_rory") }} minutes to get home.
+########################################################################################## 
+ 
+- alias: Doorbell Notification
+  initial_state: 'on'
+  trigger:
+    platform: mqtt
+    topic: doorbell/ring
+  action:
+    service: notify.smsboth
+    data:
+      title: "Doorbell"
+      message: "Someone is at the Door!"
+      
+- alias: Notify If New Devices
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: device_tracker_new_device
+  action:
+    - service: notify.home_assistant
+      data_template:
+        message: >
+          New device:
+          {{trigger.event.data.host_name}}
+          ({{trigger.event.data.entity_id}})
+        title: New device

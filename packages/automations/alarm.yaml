@@ -1,0 +1,253 @@
+######################################################
+#                   Thermostat and Alarm             #
+###################################################### 
+- alias: Thermostat to Away mode when away
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    from: 'on'
+    to: 'off'
+  action:
+    service: climate.set_hold_mode
+    entity_id: climate.thermostat
+    data:
+      hold_mode: 'away'
+##########################################################################################   
+- alias: Arm alarm when away
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    from: 'on'
+    to: 'off'
+  action:
+    service: homeassistant.turn_on
+    entity_id: input_boolean.alarmstatus
+##########################################################################################      
+- alias: Disarm alarm when home
+  trigger:
+    platform: state
+    entity_id: input_boolean.homestatus
+    from: 'off'
+    to: 'on'          
+  action:
+    service: homeassistant.turn_off
+    entity_id: input_boolean.alarmstatus
+##########################################################################################               
+- alias: arm boolean when armed
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    from: 'off'
+    to: 'on'
+  action:
+    - service: alarm_control_panel.alarm_arm_home
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: 1127
+##########################################################################################
+- alias: disarm boolean when disarmed
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    from: 'on'
+    to: 'off'
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: 1127
+##########################################################################################
+##########################################################################################      
+######## IOS notifications for alarm     
+##########################################################################################   
+- alias: Notify when alarm disarmed
+  trigger:
+    platform: state
+    entity_id: alarm_control_panel.sentinel
+    from: 'armed_home'
+    to: 'disarmed'
+  action:
+    service: notify.sms
+    data:
+      message: 'Alarm disarmed'
+##########################################################################################      
+- alias: Notify when alarm armed
+  trigger:
+    platform: state
+    entity_id: alarm_control_panel.sentinel
+    from: 'disarmed'
+    to: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      message: 'Alarm armed'
+##########################################################################################
+##Turn off panic      
+- alias: stop alarm script  when disarmed
+  trigger:
+    platform: state
+    entity_id: alarm_control_panel.sentinel
+    to: 'disarmed'
+  action:
+    service: script.turn_off
+    data:
+      entity_id: script.light_flash
+##########################################################################################
+##Basement Motion     
+##########################################################################################
+- alias: Notify basement motion w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      message: 'Motion in basement!'
+##########################################################################################      
+##Kitchen Motion
+##########################################################################################
+- alias: Notify kitchen motion w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      message: 'Motion in kitchen!'
+##########################################################################################      
+##Livingroom Motion     
+########################################################################################## 
+- alias: Notify livingroom motion w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.livingroom     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      message: 'Motion in livingroom!'
+##########################################################################################      
+##Front Motion
+##########################################################################################      
+- alias: Notify front entrance motion w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_entrance     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      message: 'Motion in front entrance!'
+##########################################################################################      
+##Kitchen Door
+##########################################################################################      
+- alias: Notify kitchen door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    - service: notify.sms
+      data:
+        message: 'Kitchen entrance opened!'
+    - service: script.turn_on
+      data:
+        entity_id: script.panic
+##########################################################################################        
+##Deck Door
+##########################################################################################      
+- alias: Notify deck door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deck_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    - service: notify.sms
+      data:
+        message: 'Deck entrance opened!'
+    - service: script.turn_on
+      data:
+        entity_id: script.panic
+##########################################################################################        
+##Front Door
+##########################################################################################      
+- alias: Notify front door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    - service: notify.sms
+      data:
+        message: 'Front entrance opened!'
+    - service: script.turn_on
+      data:
+        entity_id: script.panic
+##########################################################################################        
+##Basement Door
+##########################################################################################      
+- alias: Notify basement door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    - service: notify.sms
+      data:
+        message: 'Basement Door opened!'
+    - service: script.turn_on
+      data:
+        entity_id: script.panic
+##########################################################################################        
+##Basement Window
+##########################################################################################      
+- alias: Notify basement window w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_window     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    - service: notify.sms
+      data:
+        message: 'Basement window opened!'
+    - service: script.turn_on
+      data:
+        entity_id: script.panic

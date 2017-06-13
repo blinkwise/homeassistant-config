@@ -1,0 +1,185 @@
+###################################################
+#                Livingroom                       #
+###################################################
+  arrow:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Arrow"
+     
+  flash:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Flash"
+            
+  gothem:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Gothem"
+          
+  horror:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Horror"
+           
+  space:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Space"
+            
+  supergirl:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Supergirl"
+            
+  tracy:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Tracy"
+            
+  tron:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Tron"
+    
+  whodey:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Who Dey"               
+
+            
+  beige:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Beige"
+            
+  christmas:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Christmas"
+            
+  dragonball:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Dragonball"
+###################################################
+#                  Man Cave                       #
+###################################################            
+            
+  fireandice:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Man Cave"
+          scene_name: "Fire and Ice" 
+
+  magicians:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Man Cave"
+          scene_name: "Magicians"
+
+  twentyfour:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Man Cave"
+          scene_name: "24"     
+
+  voyager:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Man Cave"
+          scene_name: "Voyager"             
+###################################################
+#                  Lights Off                     #
+###################################################                 
+  lightsoff:
+    sequence:
+      - service: light.turn_off
+        entity_id: group.all_lights
+        
+  panic:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: group.all_lights
+          brightness: 255
+      - service: light.turn_on
+        data:
+          entity_id: light.mantle_right
+          brightness: 255
+          color_name: red
+          flash: long
+      - service: light.turn_on
+        data:
+          entity_id: light.mantle_left
+          brightness: 255
+          color_name: blue
+          flash: long
+      - service: light.turn_on
+        data:
+          entity_id: light.tv
+          brightness: 255
+          color_name: blue
+          flash: long
+      - service: light.turn_on
+        data:
+          entity_id: light.mantle_center
+          brightness: 255
+          color_name: red
+          flash: long
+      - service: light.turn_on
+        data:
+          entity_id: light.subwoofer
+          brightness: 255
+          color_name: red
+          flash: long
+      - service: light.turn_on
+        data:
+          entity_id: light.tracy_bed
+          brightness: 255
+          flash: long
+      - delay:
+          # time for flash light on
+          seconds: 10
+      - service: script.turn_on
+        data:
+          entity_id: script.light_loop
+  light_loop:
+    sequence:
+      - delay:
+          # time for flash light off
+          seconds: 1
+      - service: script.turn_on
+        data:
+          entity_id: script.light_flash
+                    
+            
+            
+            

@@ -1,0 +1,179 @@
+####################################################################################
+#                         Man Cave Sensor                                          #
+####################################################################################
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemancave"  
+    name: "Mancave Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemancave"  
+    name: "Mancave LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemancave"  
+    name: "Mancave PIR"  
+    value_template: '{{ value_json.motion }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemancave"  
+    name: "Mancave Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'
+####################################################################################
+####################################################################################
+#                         Mainframe Sensor                                          #
+####################################################################################
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemainframe"  
+    name: "Mainframe Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemainframe"  
+    name: "Mainframe LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemainframe"  
+    name: "Mainframe PIR"  
+    value_template: '{{ value_json.motion }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodemainframe"  
+    name: "Mainframe Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'
+####################################################################################
+####################################################################################
+#                         Livingroom Sensor                                          #
+####################################################################################
+  - platform: mqtt  
+    state_topic: "bruh/sensornodelivingroom"  
+    name: "Livingroom Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodelivingroom"  
+    name: "Livingroom LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  - platform: mqtt  
+    state_topic: "bruh/sensornodelivingroom"  
+    name: "Livingroom Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'
+####################################################################################
+  - platform: darksky
+    api_key: 0622919d027c5d00aeb5718f5a87fb0c
+    forecast array: 3
+    monitored_conditions:
+      - summary
+      - temperature_max
+      - temperature_min
+      - temperature
+      - apparent_temperature
+      - humidity
+      - precip_probability
+      - hourly_summary
+      - precip_intensity
+      - wind_speed
+      - pressure
+      - wind_bearing
+      - icon
+  - platform: plex
+    host: 192.168.0.114  
+  - platform: mqtt
+    state_topic: "wallpanel/mywallpanel/sensor/battery"
+    name: "wallpanel battery"
+    unit_of_measurement: "%"
+    value_template: '{{ value_json.value }}'
+
+  - platform: google_travel_time
+    name: Morning Commute Rory
+    api_key: AIzaSyB-8T1DI8jNRu94_zQ1Yjx4YaSfFjgYX30
+    origin: zone.home 
+    destination: 39.252636, -84.452476  
+      
+  - platform: google_travel_time
+    name: Evening Commute Rory
+    api_key: AIzaSyB-8T1DI8jNRu94_zQ1Yjx4YaSfFjgYX30
+    origin: 39.252636, -84.452476
+    destination: zone.home
+  
+  - platform: octoprint
+    name: OctoPrint
+    monitored_conditions:
+      - Current State
+      - Temperatures
+      - Job Percentage
+  - platform: template
+    sensors:
+      hotend:
+        friendly_name: 'Hotend Actual'
+        value_template: "{{ ((states.sensor.octoprint_actual_tool0_temp.state | float-32) | float*(5/9)) | round(2) }} °C"
+      bed:
+        friendly_name: 'Bed Actual'
+        value_template: "{{ ((states.sensor.octoprint_actual_bed_temp.state | float-32) | float*(5/9)) | round(2) }} °C"
+      hotend_target:
+        friendly_name: 'Hotend Target'
+        value_template: "{{ ((states.sensor.octoprint_target_tool0_temp.state | float-32) | float*(5/9)) | round(2) }} °C" 
+      bed_target:
+        friendly_name: 'Bed Target'
+        value_template: "{{ ((states.sensor.octoprint_target_bed_temp.state | float-32) | float*(5/9)) | round(2) }} °C"
+      target_temp:
+        friendly_name: 'Target Temp:'
+        value_template: "{{ states.climate.lifesupport.attributes.temperature }} °F"
+   
+
+      
+ 
+  - platform: pi_hole
+ 
+  - platform: speedtest
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: memory_free
+      
+    
+  - platform: rest
+    name: pollen
+    resource: https://www.pollen.com/api/forecast/current/pollen/41015
+    value_template: "{{value_json.Location.periods[1].Index}}"
+    scan_interval: 21600
+    headers:
+       Referer: "https://www.pollen.com"
+  - platform: template
+    sensors:
+      pollen_level:
+        friendly_name: 'Pollen Level'
+        value_template: >-
+          {%- if states.sensor.pollen.state|float <= 2.4 %}
+              Low
+          {%- elif states.sensor.pollen.state|float <= 4.8 %}
+            Medium-Low
+          {%- elif states.sensor.pollen.state|float <= 7.2 %}
+              Medium
+          {%- elif states.sensor.pollen.state|float <= 9.6 %}
+              Medium-High
+          {%- elif states.sensor.pollen.state|float <= 12.0 %}
+              High
+          {% else %}
+              Unknown
+          {%- endif %}
+
