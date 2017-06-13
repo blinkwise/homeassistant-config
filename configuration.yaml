@@ -2,14 +2,14 @@ homeassistant:
   # Name of the location where Home Assistant is running
   name: Home
   # Location required to calculate the time the sun rises and sets
-  latitude: 38.98262245118523
-  longitude: -84.49487848215223
+  latitude: !secret latitude
+  longitude: !secret longitude
   # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 226
+  elevation: !secret elevation
   # metric for Metric, imperial for Imperial
   unit_system: imperial
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: America/New_York
+  time_zone: !secret time_zone
  ###################################################
  #                 Customization                   #
  ###################################################
@@ -34,11 +34,11 @@ config:
 
 http:
   # Uncomment this to add a password (recommended!)
-  api_password: tracyh32
+  api_password: !secret http_password
   # Uncomment this if you are using SSL or running in Docker etc
-  base_url: blinkwise.duckdns.org
-  ssl_certificate: /etc/letsencrypt/live/blinkwise.duckdns.org/fullchain.pem
-  ssl_key: /etc/letsencrypt/live/blinkwise.duckdns.org/privkey.pem
+  base_url: !secret base_url
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
   ip_ban_enabled: True
   login_attempts_threshold: 5
   trusted_networks:
@@ -80,37 +80,37 @@ notify:
     server: smtp.gmail.com
     port: 587
     timeout: 15
-    sender: rory.moser@gmail.com
+    sender: !secret notifysender
     starttls: true
-    username: rory.moser@gmail.com
-    password: dzvmemxbifvjuhwy
+    username: !secret notifyusername
+    password: !secret notifypassword
     recipient:
-      - 8593915538@vtext.com
+      - !sectret rorytext
     sender_name: My Home Assistant
   - name: smsboth
     platform: smtp
     server: smtp.gmail.com
     port: 587
     timeout: 15
-    sender: rory.moser@gmail.com
+    sender: !secret notifysender
     starttls: true
-    username: rory.moser@gmail.com
-    password: dzvmemxbifvjuhwy
+    username: !secret notifyusername
+    password: !secret notifypassword
     recipient:
-      - 8593915538@vtext.com
-      - 8594455378@txt.att.net
+      - !sectret rorytext
+      - !sectret tracytext
     sender_name: My Home Assistant 
   - name: smsdad
     platform: smtp
     server: smtp.gmail.com
     port: 587
     timeout: 15
-    sender: rory.moser@gmail.com
+    sender:!secret notifysender
     starttls: true
-    username: rory.moser@gmail.com
-    password: dzvmemxbifvjuhwy
+    username: !secret notifyusername
+    password: !secret notifypassword
     recipient:
-      - 8592500635@vtext.com
+      - !sectret dadtext
     sender_name: My Home Assistant    
 
 ###################################################
@@ -132,20 +132,20 @@ automation:  !include_dir_merge_list packages/automations/
 #                    MQTT                         #
 ###################################################
 octoprint:
-  host: octopi.local
-  api_key: 8A9635A66CC04CE3959241B6FC15191D
+  host: !secret octohost
+  api_key: !secret octoapi
   
       
 recorder:
-  db_url: mysql://hass:PASSWORD@127.0.0.1/homeassistant?charset=utf8
+  db_url: !secret db_url
   purge_days: 3
   
 mqtt:
-  broker: 192.168.0.109
-  port: 1883
+  broker: !secret mqttbroker
+  port: !secret mqttport
   client_id: home-assistant-1
-  username: username
-  password: tracyh32
+  username: !secret mqttusername
+  password: !secret mqttpassword
   keepalive: 60
 
 light:  
@@ -192,9 +192,9 @@ device_tracker:
   - platform: owntracks
   
   - platform: tplink
-    host: 192.168.0.1
-    username: blinkwise
-    password: tracyh32
+    host: !secret tplinkhost
+    username: !secret tplinkusername
+    password: !secret tplinkpassword
     interval_seconds: 5
     consider_home: 180
     track_new_devices: yes
