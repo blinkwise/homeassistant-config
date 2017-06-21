@@ -41,38 +41,16 @@
       group_name: "Living room"
       scene_name: "Beige"       
 ##########################################################################################    
-- alias: Turn off kitchen light 10 minutes after last movement
+- alias: Turn off kitchen light 45 minutes after last movement
   trigger:
     platform: state
     entity_id: binary_sensor.kitchen
     to: 'off'
     for:
-      minutes: 10
+      minutes: 45
   action:
     service: light.turn_off
     entity_id: light.kitchen  
-##########################################################################################
-######################################################
-#                 Livingroom Lights                  #
-######################################################
-##########################################################################################
-- alias: Fade on livingroom lights
-  trigger:
-    platform: numeric_state
-    entity_id: sensor.livingroom_ldr
-    above: 850
-  condition:
-    condition: and
-    conditions:
-     - condition: state
-       entity_id: input_boolean.homestatus
-       state: 'on'
-     - condition: state
-       entity_id: 'light.mantle_right'
-       state: 'off'
-  action:
-    service: scene.turn_on
-    entity_id: scene.livingroom_fadeon
 ##########################################################################################
 ######################################################
 #                 Outside Lights                     #
@@ -193,7 +171,7 @@
     - service: switch.turn_off
       entity_id: switch.front_alcove
 ##########################################################################################
-- alias: Media Turn on hall lights if livingroom off
+- alias: Turn on hall lights if livingroom off
   trigger:
     platform: state
     entity_id: group.stellar
@@ -207,5 +185,24 @@
     - service: switch.turn_on
       entity_id: switch.front_alcove    
     
+- alias: kitchen door on
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door
+    to: 'on'
+  action:
+    service: light.turn_on
+    entity_id: light.kitchen_door  
+    
+- alias: kitchen door off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door
+    to: 'off'
+    for:
+      minutes: 1 
+  action:
+    service: light.turn_off
+    entity_id: light.kitchen_door        
     
     

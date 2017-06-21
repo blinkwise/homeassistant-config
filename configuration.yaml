@@ -69,11 +69,19 @@ scene: !include packages/scenes.yaml
 
 input_boolean: !include packages/inputboolean.yaml
 
-remote:
-  - platform: harmony
-    name: Harmony
-    host: !secret harmonyhost
+#google:
+#  client_id: !secret googlecalendarID
+#  client_secret: !secret googlecalendarSECRET
+  
+#remote:
+#  - platform: harmony
+#    name: Harmony
+#    host: !secret harmonyhost
 
+device_sun_light_trigger:
+  light_group: group.livingroomlights
+  light_profile: relax
+ 
 notify:
   - name: sms
     platform: smtp
@@ -99,6 +107,17 @@ notify:
     recipient:
       - !secret rorytext
       - !secret tracytext
+  - name: smstracy
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: !secret notifysender
+    starttls: true
+    username: !secret notifyusername
+    password: !secret notifypassword
+    recipient:
+      - !secret tracytext
     sender_name: My Home Assistant 
   - name: smsdad
     platform: smtp
@@ -111,7 +130,19 @@ notify:
     password: !secret notifypassword
     recipient:
       - !secret dadtext
-    sender_name: My Home Assistant    
+    sender_name: My Home Assistant 
+  - name: smsbrennan
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: !secret notifysender
+    starttls: true
+    username: !secret notifyusername
+    password: !secret notifypassword
+    recipient:
+      - !secret brennantext
+    sender_name: My Home Assistant     
 
 ###################################################
 #                    Sensors                      #
@@ -119,12 +150,12 @@ notify:
 # Track the sun
 sun:
 
-# Weather Prediction
+ #Weather Prediction
 sensor: !include packages/sensor.yaml
     
 # Text to speech
-tts:
-  platform: google
+#tts:
+#  platform: google
 
 group: !include packages/groups.yaml
 automation:  !include_dir_merge_list packages/automations/
@@ -168,7 +199,7 @@ light:
     rgb: true  
     optimistic: false  
     qos: 0 
-    
+   
   - platform: hue
     scan_interval: 5    
   
@@ -259,7 +290,7 @@ envisalink:
   partitions:
     1:
       name: 'Sentinel'
-    
+   
      
 ###################################################
 #                    Scripts                      #
@@ -271,6 +302,11 @@ camera:
   - platform: mjpeg
     mjpeg_url: !secret octomjpeg_url
     name: Replicator
+  - platform: amcrest
+    host: !secret amcrestip
+    username: !secret amcrestusername
+    password: !secret amcrestpass
+    name: Front Entrance
 
 
 

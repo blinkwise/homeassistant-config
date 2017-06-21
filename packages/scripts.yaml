@@ -115,7 +115,15 @@
       - service: light.hue_activate_scene
         data:
           group_name: "Man Cave"
-          scene_name: "Voyager"             
+          scene_name: "Voyager"  
+
+  xbox:
+    sequence:
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Man Cave"
+          scene_name: "Xbox"              
+          
 ###################################################
 #                  Lights Off                     #
 ###################################################                 
@@ -123,6 +131,10 @@
     sequence:
       - service: light.turn_off
         entity_id: group.all_lights
+      - service: homeassistant.turn_off
+        entity_id: switch.front_alcove
+      - service: homeassistant.turn_off
+        entity_id: switch.stair_alcove
         
   panic:
     sequence:
@@ -130,55 +142,55 @@
         data:
           entity_id: group.all_lights
           brightness: 255
+      - service: light.hue_activate_scene
+        data:
+          group_name: "Living room"
+          scene_name: "Horror"
+      - service: script.turn_on
+        data:
+          entity_id: script.light_loop1
+          
+  light_loop1:
+    sequence:
+      - delay:
+          # time for flash light off
+          seconds: 1
+      - service: light.turn_on
+        data:
+          entity_id: light.mantle_right
+          brightness: 255
+          color_name: blue
+          flash: short
+      - service: light.turn_on
+        data:
+          entity_id: light.mantle_left
+          brightness: 255
+          color_name: red
+          flash: short
+      - service: script.turn_on
+        data:
+          entity_id: script.light_loop2
+  light_loop2:
+    sequence:
+      - delay:
+          # time for flash light off
+          seconds: 1
       - service: light.turn_on
         data:
           entity_id: light.mantle_right
           brightness: 255
           color_name: red
-          flash: long
+          flash: short
       - service: light.turn_on
         data:
           entity_id: light.mantle_left
           brightness: 255
           color_name: blue
-          flash: long
-      - service: light.turn_on
-        data:
-          entity_id: light.tv
-          brightness: 255
-          color_name: blue
-          flash: long
-      - service: light.turn_on
-        data:
-          entity_id: light.mantle_center
-          brightness: 255
-          color_name: red
-          flash: long
-      - service: light.turn_on
-        data:
-          entity_id: light.subwoofer
-          brightness: 255
-          color_name: red
-          flash: long
-      - service: light.turn_on
-        data:
-          entity_id: light.tracy_bed
-          brightness: 255
-          flash: long
-      - delay:
-          # time for flash light on
-          seconds: 10
+          flash: short
       - service: script.turn_on
         data:
-          entity_id: script.light_loop
-  light_loop:
-    sequence:
-      - delay:
-          # time for flash light off
-          seconds: 1
-      - service: script.turn_on
-        data:
-          entity_id: script.light_flash
+          entity_id: script.light_loop1
+                    
                     
             
             

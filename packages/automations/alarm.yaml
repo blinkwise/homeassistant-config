@@ -69,6 +69,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Alarm disarmed'
 ##########################################################################################      
 - alias: Notify when alarm armed
@@ -80,6 +81,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Alarm armed'
 ##########################################################################################
 ##Turn off panic      
@@ -89,9 +91,20 @@
     entity_id: alarm_control_panel.sentinel
     to: 'disarmed'
   action:
-    service: script.turn_off
-    data:
-      entity_id: script.light_flash
+    - service: script.turn_off
+      data:
+        entity_id: script.light_loop1
+    - service: script.turn_off
+      data:
+        entity_id: script.light_loop2
+    - service: script.turn_off
+      data:
+        entity_id: script.panic
+    - service: light.turn_on
+      data:
+        entity_id: group.all_lights
+        color: white
+        brightness: 255
 ##########################################################################################
 ##Basement Motion     
 ##########################################################################################
@@ -107,6 +120,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Motion in basement!'
 ##########################################################################################      
 ##Kitchen Motion
@@ -123,6 +137,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Motion in kitchen!'
 ##########################################################################################      
 ##Livingroom Motion     
@@ -139,6 +154,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Motion in livingroom!'
 ##########################################################################################      
 ##Front Motion
@@ -155,6 +171,7 @@
   action:
     service: notify.sms
     data:
+      title: "Sentinel"
       message: 'Motion in front entrance!'
 ##########################################################################################      
 ##Kitchen Door
@@ -171,6 +188,7 @@
   action:
     - service: notify.sms
       data:
+        title: "Sentinel"
         message: 'Kitchen entrance opened!'
     - service: script.turn_on
       data:
@@ -190,6 +208,7 @@
   action:
     - service: notify.sms
       data:
+        title: "Sentinel"
         message: 'Deck entrance opened!'
     - service: script.turn_on
       data:
@@ -209,6 +228,7 @@
   action:
     - service: notify.sms
       data:
+        title: "Sentinel"
         message: 'Front entrance opened!'
     - service: script.turn_on
       data:
@@ -228,6 +248,7 @@
   action:
     - service: notify.sms
       data:
+        title: "Sentinel"
         message: 'Basement Door opened!'
     - service: script.turn_on
       data:
@@ -247,6 +268,7 @@
   action:
     - service: notify.sms
       data:
+        title: "Sentinel"
         message: 'Basement window opened!'
     - service: script.turn_on
       data:
@@ -273,8 +295,81 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.doorbell_chime
-
-        
+##########################################################################################        
+##                            You left the door open notifications                       #
+########################################################################################## 
+- alias: Notify front entrance motion w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_entrance     
+    to: 'on'
+    for:
+      minutes: 10
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the front door open'
+##########################################################################################      
+##Kitchen Door
+##########################################################################################      
+- alias: Notify kitchen door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door     
+    to: 'on'
+    for:
+      minutes: 10
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the kitchen door open'
+##########################################################################################        
+##Deck Door
+##########################################################################################      
+- alias: Notify deck door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deck_door     
+    to: 'on'
+    for:
+      minutes: 10
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the deck door open'
+##########################################################################################        
+##Front Door
+##########################################################################################      
+- alias: Notify front door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_door     
+    to: 'on'
+    for:
+      minutes: 10
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the front door open'
+##########################################################################################        
+##Basement Door
+##########################################################################################      
+- alias: Notify basement door w/ alarm armed
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_door     
+    to: 'on'
+    for:
+      minutes: 30
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the basement window open'        
         
         
         

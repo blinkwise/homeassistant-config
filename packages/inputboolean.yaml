@@ -31,3 +31,7 @@
   deckdoor:
     name: deckdoor
     initial: off
+  vacation:
+    name: vacation
+    initial: off
+    

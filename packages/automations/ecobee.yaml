@@ -14,7 +14,27 @@
         hold_mode: 'home'
     - service: notify.sms
       data:
-        message: 'Ecobee set to home'         
+        message: 'Ecobee set to home'     
+##########################################################################################
+- alias: home comfort sleep
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus
+        state: 'on'
+      - condition: time
+        before: '05:00:00'  
+        after: '22:00:00'   
+  action: 
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'sleep'        
 ##########################################################################################
 - alias: home comfort away
   trigger:
@@ -28,13 +48,34 @@
         hold_mode: 'away'
     - service: notify.sms
       data:
-        message: 'Ecobee set to away'        
+        message: 'Ecobee set to away'       
+##########################################################################################
+- alias: home comfort away
+  trigger:
+    - platform: time
+    # You can also match on interval. This will match every 5 minutes
+      minutes: '/5'
+      seconds: 00
+  condition:
+    condition: state
+    entity_id: input_boolean.homestatus
+    state: 'off'
+  action: 
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'away'       
+        
 ##########################################################################################
 - alias: home comfort AC
   trigger:
     platform: numeric_state
     entity_id: sensor.dark_sky_temperature
     above: 65
+  condition:
+    condition: state
+    entity_id: input_boolean.homestatus
+    state: 'on'
   action: 
     - service: climate.SET_OPERATION_MODE
       entity_id: climate.lifesupport
@@ -49,6 +90,15 @@
     platform: numeric_state
     entity_id: sensor.dark_sky_temperature
     below: 65
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus
+        state: 'on'
+      - condition: time
+        before: '23:00:00'  
+        after: '08:00:00'
   action: 
     - service: climate.SET_OPERATION_MODE
       entity_id: climate.lifesupport

@@ -177,3 +177,44 @@
               Unknown
           {%- endif %}
 
+  - platform: xbox_live
+    api_key: 1abbf2808a373d6dac652b228ce96a1f87754f50
+    xuid:
+    #me
+      - 2698138705328898
+    #bart  
+      - 2535448268339608
+    #brennan
+      - 2535462708525843
+    #Chris
+      - 2533274832337782
+      
+  - platform: steam_online
+    api_key: FB30B5799B8CD322CECAE58163EA588A
+    accounts: 
+    #Me
+      - 76561197962258165
+    #Brennan
+      - 76561197986919930
+      
+  - platform: amcrest
+    name: "Front Door"
+    host: !secret amcrestip
+    username: !secret amcrestusername
+    password: !secret amcrestpass
+    monitored_conditions:
+      - motion_detector
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

@@ -93,9 +93,21 @@
     service: climate.SET_HOLD_MODE
     data:
       hold_mode: home
-
-        
-        
+##########################################################################################
+- alias: set lights green if bart gets on xbox
+  trigger:
+    - platform: state
+      entity_id: sensor.a_hope_unseen
+      from: 'Offline'
+  condition:
+    condition: state
+    entity_id: input_boolean.mancave
+    state: 'on'
+  action:
+    - service: light.hue_activate_scene
+      data:
+        group_name: "Man Cave"
+        scene_name: "Xbox" 
         
         
         

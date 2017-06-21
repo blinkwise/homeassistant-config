@@ -353,19 +353,26 @@
     platform: mqtt
     topic: doorbell/ring
   action:
-    - service: notify.smsboth
+    - service: notify.sms
       data:
         title: "Doorbell"
         message: "Someone is at the Door!"
     - condition: state
       entity_id: input_boolean.homestatus
       state: 'on'
+    - condition: state
+      entity_id: input_boolean.alarmstatus
+      state: 'off'
     - service: light.turn_on
       data:
         entity_id: group.huelights
         flash: short
     - service: light.turn_on
       entity_id: light.front_entrence
+    - service: notify.smstracy
+      data:
+        title: "Doorbell"
+        message: "Someone is at the Door!"
 ##########################################################################################       
 - alias: Notify If New Devices
   initial_state: 'on'

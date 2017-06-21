@@ -15,14 +15,9 @@
       - condition: state
         entity_id: light.kitchen
         state: 'off' 
-      - condition: or
-        conditions:    
-          - condition: state
-            entity_id: group.livingroomlights 
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.deckdoor
-            state: 'on'        
+      - condition: state
+        entity_id: group.livingroomlights 
+        state: 'off'      
   action:
     service: homeassistant.turn_on
     entity_id: input_boolean.kitchenmotion  
@@ -49,13 +44,17 @@
 - alias: Turn off kitchen light 3 minutes after last movement
   trigger:
     platform: state
-    entity_id: input_boolean.kitchenmotion
+    entity_id: binary_sensor.kitchen
     to: 'off'
     for:
       minutes: 3
+  condition:
+    condition: state
+    entity_id: input_boolean.kitchenmotion
+    state: 'on'
   action:
-    service: light.turn_off
-    entity_id: light.kitchen  
+    service: homeassistant.turn_off
+    entity_id: input_boolean.kitchenmotion
 ##########################################################################################
 ######################################################
 #                Basement Lights                     #
@@ -178,9 +177,25 @@
   action:
     service: homeassistant.turn_off
     entity_id: input_boolean.deckdoor
-
-
-
+######################################################
+#                Mancave                             #
+######################################################
+- alias: turn on multisensor led w/ motion in man cave
+  trigger:
+    platform: state
+    entity_id: sensor.mancave_pir      
+    to: 'motion detected'
+  action:
+    service: light.turn_on
+    entity_id: light.mancave_led
+- alias: turn off multisensor led w/ motion in man cave
+  trigger:
+    platform: state
+    entity_id: sensor.mancave_pir      
+    to: 'standby'
+  action:
+    service: light.turn_off
+    entity_id: light.mancave_led
 
 
 

@@ -2,7 +2,7 @@
 #                    Home Page                    #
 ###################################################
 
-  default_view: 
+  default_view:  
     view: yes
     entities: 
       - group.sentinel
@@ -14,6 +14,15 @@
 ###################################################
 #                    Views                        #
 ###################################################
+
+  Brandtly_view:
+    view: yes
+    name: General 
+    entities:
+      - group.brandtly
+      - switch.doorbell_chime
+      - group.frontdoorcam
+      
   Office-Mancave_view:
     view: yes
     name: Man Cave
@@ -21,29 +30,9 @@
       - group.mancave
       - group.mancave_scenes
       - group.sensor_node_1_card
-      - input_boolean.mancave
-  Office-Tracy_view:
-    view: yes
-    name: Lady Lair
-    entities:
-      - group.ladylair
-  Livingroom_view:
-    view: yes
-    name: Living Room
-    entities:
-      - group.stellar
-      - group.livingroom_scenes 
-  Brandtly_view:
-    view: yes
-    name: Home 
-    entities:
-      - group.brandtly
-      - switch.doorbell_chime
-  Bedroom_view:
-    view: yes
-    name: Bedroom
-    entities:
-      - group.bedroom
+      - group.xbox
+      - group.steam
+      
   Workshop_view:
     name: Workshop
     view: yes
@@ -51,6 +40,41 @@
       - group.workshop
       - camera.replicator
       - group.workshop_switches
+      
+  Office-Tracy_view:
+    view: yes
+    name: Lady Lair
+    entities:
+      - group.ladylair
+      
+  Livingroom_view:
+    view: yes
+    name: Living Room
+    entities:
+      - group.stellar
+      - group.livingroom_scenes 
+
+  Bedroom_view:
+    view: yes
+    name: Bedroom
+    entities:
+      - group.bedroom
+
+  Alarm_View:
+    name: Sentinel
+    view: yes
+    entities:
+      - group.alarmcard
+      
+  Vacation_View:
+    name: Vacation
+    view: yes
+    entities:
+      - input_boolean.vacation
+      - group.Vacation
+      - group.frontdoorcam
+      - group.lifesupport
+      
   Control_view:
     name: Control
     view: yes
@@ -60,15 +84,17 @@
       - group.all_lights
       - group.all_scripts
       - group.all_switches
-  Alarm_View:
-    name: Sentinel
-    view: yes
-    entities:
-      - group.alarmcard
-     
+
+
+
 ###################################################
 #                    Groups                       #
-###################################################      
+################################################### 
+  frontdoorcam:
+    name: Front Door Camera
+    entities:
+      - camera.front_entrance
+      - sensor.front_door_motion_detected    
   mancave:
     name: Mancave
     entities:
@@ -82,6 +108,7 @@
       - script.magicians
       - script.twentyfour
       - script.voyager
+      - script.xbox
   ladylair:
     name: Lady Lair
     entities:
@@ -168,6 +195,8 @@
       - light.front_entrence
       - light.basement_lights
       - light.back_flood_light
+      - switch.deck
+      - light.kitchen_door
       - light.kitchen
       - sensor.holocron
   family_view:
@@ -236,6 +265,7 @@
       - sensor.Mancave_ldr  
       - sensor.Mancave_pir  
       - light.Mancave_led
+      - input_boolean.mancave
   huelights:
     name: huelights
     entities:
@@ -265,10 +295,53 @@
       - light.mantle_left
       - light.mantle_right
       - light.subwoofer
-      - light.tv       
-      
-      
-      
+      - light.tv 
+  halllights:
+    name: Hall Lights
+    entities:
+      - light.hall_3
+      - light.hall_4
+  Xbox:
+    name: Xbox Live
+    entities:
+      - sensor.a_hope_unseen
+      - sensor.blinkwise
+      - sensor.lordmoser
+  Steam:
+    name: Steam
+    entities:
+      - sensor.steam_76561197962258165
+      - sensor.steam_76561197986919930
+  Vacation: 
+    name: Vacation
+    entities:
+      - automation.v0
+      - automation.v1
+      - automation.v2
+      - automation.v3
+      - automation.v4
+      - automation.v5
+      - automation.v6
+      - automation.v7
+      - automation.v8
+      - automation.v9      
+      - automation.v10 
+      - automation.v11
+      - automation.v12
+      - automation.v13
+      - automation.v14
+      - automation.v15
+      - automation.v16
+      - automation.v17
+      - automation.v18
+      - automation.v19      
+      - automation.v20
+      - automation.v21      
+      - automation.v22
+      - automation.v23
+      - automation.v24   
+      - automation.v25 
+      - automation.v26      
       
       
       
