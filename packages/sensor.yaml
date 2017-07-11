@@ -134,9 +134,7 @@
         friendly_name: 'Target Temp:'
         value_template: "{{ states.climate.lifesupport.attributes.temperature }} °F"
    
-
-      
- 
+   
   - platform: pi_hole
  
   - platform: speedtest
@@ -150,6 +148,10 @@
         arg: /
       - type: memory_free
       
+  - platform: template
+    sensors:
+      time:
+        value_template: '{{(now().strftime("%H") | int) + (now().strftime("%M")|int / 60) | round(2)}}'
     
   - platform: rest
     name: pollen

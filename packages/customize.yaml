@@ -125,5 +125,10 @@
       hidden: false
     group.all_switches:
       hidden: false
+    binary_sensor.octoprint_printing:
+      icon: mdi:printer-3d
+    binary_sensor.octoprint_printing_error:
+      icon: mdi:printer-3d
+    
       
       

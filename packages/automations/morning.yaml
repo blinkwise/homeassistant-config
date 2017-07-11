@@ -48,3 +48,28 @@
     - service: notify.smsbrennan
       data:
         message: "The allergy level is {{ states.sensor.pollen_level.state }}."
+        
+- alias: 'Commute To Work (Rory)'
+  initial_state: 'on'
+  trigger:
+    platform: template
+    value_template: "{{ ((now().strftime('%H') | int) + (now().strftime('%M')|int / 60) | round(2)) > ( 8.33 - ((states.sensor.morning_commute_rory.state) | int / 60)) }}"
+  condition:
+    condition: and
+    conditions:
+     - condition: time
+       weekday:
+         - mon
+         - tue
+         - wed
+         - thu
+         - fri
+     - condition: state
+       entity_id: input_boolean.roryhome
+       state: 'on'   
+  action:
+    service: notify.sms
+    data_template:
+      title: "Time to go!"
+      message: >
+        It will take {{ states("sensor.morning_commute_rory") }} minutes to get to work.

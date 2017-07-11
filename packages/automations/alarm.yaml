@@ -298,22 +298,10 @@
 ##########################################################################################        
 ##                            You left the door open notifications                       #
 ########################################################################################## 
-- alias: Notify front entrance motion w/ alarm armed
-  trigger:
-    platform: state
-    entity_id: binary_sensor.front_entrance     
-    to: 'on'
-    for:
-      minutes: 10
-  action:
-    service: notify.smsboth
-    data:
-      title: "Sentinel"
-      message: 'Someone left the front door open'
 ##########################################################################################      
 ##Kitchen Door
 ##########################################################################################      
-- alias: Notify kitchen door w/ alarm armed
+- alias: Notify if kitchen door left open
   trigger:
     platform: state
     entity_id: binary_sensor.garage_door     
@@ -328,7 +316,7 @@
 ##########################################################################################        
 ##Deck Door
 ##########################################################################################      
-- alias: Notify deck door w/ alarm armed
+- alias: Notify if deck door left open
   trigger:
     platform: state
     entity_id: binary_sensor.deck_door     
@@ -358,7 +346,7 @@
 ##########################################################################################        
 ##Basement Door
 ##########################################################################################      
-- alias: Notify basement door w/ alarm armed
+- alias: Notify if basement door left open
   trigger:
     platform: state
     entity_id: binary_sensor.basement_door     
@@ -369,8 +357,67 @@
     service: notify.smsboth
     data:
       title: "Sentinel"
-      message: 'Someone left the basement window open'        
-        
+      message: 'Someone left the basement door open'
+##########################################################################################        
+##Basement window
+##########################################################################################       
+- alias: Notify basement window left open 
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_window     
+    to: 'on'
+    for:
+      minutes: 30
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the basement window open'    
+##########################################################################################        
+##Turn off alarm with front_entrance motion
+##########################################################################################       
+- alias: Turn off alarm with front_entrance motion 
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_entrance     
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus 
+        state: 'on'
+      - condition: time
+        after: '05:00:00'
+      - condition: state
+        entity_id:  input_boolean.alarmstatus
+        state: 'on'
+  action:
+    service: homeassistant.turn_off
+    entity_id: input_boolean.alarmstatus            
+##########################################################################################        
+##Arm Alarm at night with lights
+##########################################################################################       
+- alias: Turn on alarm when tracy light turned off after 10pm
+  trigger:
+    platform: state
+    entity_id: light.tracy_bed     
+    to: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus 
+        state: 'on'
+      - condition: time
+        after: '22:00:00'
+      - condition: state
+        entity_id:  input_boolean.alarmstatus
+        state: 'off'
+  action:
+    service: homeassistant.turn_on
+    entity_id: input_boolean.alarmstatus            
+               
         
         
         

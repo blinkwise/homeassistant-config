@@ -16,6 +16,8 @@ homeassistant:
   customize_glob:
       light.*:
         custom_ui_state_card: custom_light
+      binary_sensor.*:
+        icon: mdi:security-homeF
            
   customize: !include packages/customize.yaml
     
@@ -48,6 +50,13 @@ http:
     - 2001:DB8:ABCD::/48
     
 panel_iframe: !include packages/iframe.yaml
+
+panel_custom: 
+  - name: floorplan
+    sidebar_title: Floorplan
+    sidebar_icon: mdi:home
+    url_path: floorplan
+    config: !include floorplan.yaml
   
     
 # Checks for available updates

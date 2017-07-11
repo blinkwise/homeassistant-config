@@ -40,17 +40,6 @@
     data:
       group_name: "Living room"
       scene_name: "Beige"       
-##########################################################################################    
-- alias: Turn off kitchen light 45 minutes after last movement
-  trigger:
-    platform: state
-    entity_id: binary_sensor.kitchen
-    to: 'off'
-    for:
-      minutes: 45
-  action:
-    service: light.turn_off
-    entity_id: light.kitchen  
 ##########################################################################################
 ######################################################
 #                 Outside Lights                     #

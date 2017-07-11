@@ -1,0 +1,546 @@
+######################################################
+#                 Vacation                           #
+######################################################
+##########################################################################################     
+- alias: Turn off all automations and turn on vacation automations
+  trigger:
+    platform: state
+    entity_id: input_boolean.vacation
+    to: 'on'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.all_automations
+    - service: homeassistant.turn_on
+      entity_id: group.vacation
+    - service: alarm_control_panel.alarm_arm_home
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: !secret alarmcode 
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Vacation mode enabled'
+      
+##########################################################################################
+- alias: v0
+  initial_state: off
+  trigger:
+    - platform: state
+      entity_id: device_tracker.rory, device_tracker.username_rory, device_tracker.tracy, device_tracker.username_tracy
+      to: 'home'      
+  action:
+    service: homeassistant.turn_off
+    entity_id: input_boolean.vacation
+    
+- alias: v26
+  trigger:
+    platform: state
+    entity_id: input_boolean.vacation
+    to: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.all_automations
+    - service: homeassistant.turn_off
+      entity_id: group.vacation
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: !secret alarmcode
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Vacation mode disabled'
+# Turn on alcove lights at sunset     
+- alias: v1
+  initial_state: off
+  trigger:
+    platform: sun
+    event: sunset
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.stair_alcove
+    - service: switch.turn_on
+      entity_id: switch.front_alcove
+#Turn on lady lair random time      
+- alias: v2
+  initial_state: off
+  trigger:
+    platform: sun
+    event: sunset
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '19:00:00'
+      - condition: time
+        before: '00:00:00'    
+  action:
+    - delay: '{{ ((range(0, 1) | random) | int) ~ ":" ~ ((range(5, 55) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_on
+      entity_id: group.ladylair
+    - delay: '{{ ((range(2, 3) | random) | int) ~ ":" ~ ((range(5, 55) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: group.ladylair
+#Turn on livingroom lights when ladylair turns off for random time
+- alias: v3
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: group.ladylair
+    state: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '19:00:00'
+      - condition: time
+        before: '00:00:00'      
+  action:
+    - service: light.turn_on
+      entity_id: group.livingroomlights
+    - delay: '{{ ((range(1, 2) | random) | int) ~ ":" ~ ((range(5, 55) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: group.livingroomlights
+#Turn on front enterence for a few mins after livingroom turns off, random time      
+- alias: v4
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: group.livingroomlights
+    state: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '19:00:00'
+      - condition: time
+        before: '00:00:00'      
+  action:
+    - service: light.turn_on
+      entity_id: light.front_entrence
+    - delay: '{{ ((range(0, 0) | random) | int) ~ ":" ~ ((range(1, 5) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: light.front_entrence
+#Turn on bedroom light after livingroom lights, random time      
+- alias: v5
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: group.livingroomlights
+    state: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '19:00:00'
+      - condition: time
+        before: '00:00:00'      
+  action:
+    - delay: '{{ ((range(1, 2) | random) | int) ~ ":" ~ ((range(1, 5) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_on
+      entity_id: group.bedroom
+    - delay: '{{ ((range(0, 0) | random) | int) ~ ":" ~ ((range(15, 45) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: group.bedroom
+#Turn on mancave when I should get home for random time      
+- alias: v6
+  initial_state: off
+  trigger:
+    platform: time
+    at: '18:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '17:00:00'
+      - condition: time
+        before: '00:00:00'      
+  action:
+    - delay: '{{ ((range(0, 0) | random) | int) ~ ":" ~ ((range(1, 45) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_on
+      entity_id: light.man_cave
+    - delay: '{{ ((range(4, 5) | random) | int) ~ ":" ~ ((range(15, 45) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: light.man_cave
+# Turn on bedroom after mancave turns off for random time      
+- alias: v7
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: light.man_cave
+    state: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '19:00:00'
+      - condition: time
+        before: '00:00:00'     
+  action:
+    - delay: '{{ ((range(0, 0) | random) | int) ~ ":" ~ ((range(1, 45) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_on
+      entity_id: group.bedroom
+    - delay: '{{ ((range(0, 0) | random) | int) ~ ":" ~ ((range(3, 10) | random) | int)  ~ ":" ~  ((range(5, 55) | random) | int) }}'
+    - service: light.turn_off
+      entity_id: group.bedroom
+# Turn off all lights at midnight      
+- alias: v8
+  initial_state: off
+  trigger:
+    platform: time
+    at: '00:00:00'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'    
+  action:
+    - service: light.turn_off
+      entity_id: group.all_lights
+    - service: homeassistant.turn_off
+      entity_id: switch.front_alcove
+    - service: homeassistant.turn_off
+      entity_id: switch.stair_alcove
+# Put ecobee into vacation mode      
+- alias: v9
+  initial_state: off
+  trigger:
+    - platform: time
+    # You can also match on interval. This will match every 5 minutes
+      minutes: '/5'
+      seconds: 00
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'  
+  action: 
+    - service: climate.set_hold_mode
+      entity_id: climate.lifesupport
+      data:
+        hold_mode: 'away'
+#Rearm alarm 20mins after disarmed        
+- alias: v10 
+  initial_state: off       
+  trigger:
+    platform: state
+    entity_id: alarm_control_panel.sentinel
+    from: 'armed_home'
+    to: 'disarmed'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Alarm disarmed' 
+    - delay: 
+        minutes: 20
+    - service: alarm_control_panel.alarm_arm_home
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: !secret alarmcode  
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Alarm Armed'          
+        
+- alias: v11
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: alarm_control_panel.sentinel
+    state: 'armed_home'
+  action:
+    service: notify.sms
+    data:
+      title: "Sentinel"
+      message: 'Motion in basement!'
+##########################################################################################      
+##Kitchen Motion
+##########################################################################################
+- alias: v12
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.sms
+    data:
+      title: "Sentinel"
+      message: 'Motion in kitchen!'
+##########################################################################################      
+##Livingroom Motion     
+########################################################################################## 
+- alias: v13
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.livingroom     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.sms
+    data:
+      title: "Sentinel"
+      message: 'Motion in livingroom!'
+##########################################################################################      
+##Front Motion
+##########################################################################################      
+- alias: v14
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_entrance     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.sms
+    data:
+      title: "Sentinel"
+      message: 'Motion in front entrance!'
+##########################################################################################      
+##Kitchen Door
+##########################################################################################      
+- alias: v15
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Kitchen entrance opened!'
+##########################################################################################        
+##Deck Door
+##########################################################################################      
+- alias: v16
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deck_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Deck entrance opened!'
+##########################################################################################        
+##Front Door
+##########################################################################################      
+- alias: v17
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Front entrance opened!'
+##########################################################################################        
+##Basement Door
+##########################################################################################      
+- alias: v18
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_door     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Basement Door opened!'
+
+##########################################################################################        
+##Basement Window
+##########################################################################################      
+- alias: v19
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_window     
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    - service: notify.sms
+      data:
+        title: "Sentinel"
+        message: 'Basement window opened!'
+
+##########################################################################################        
+##                            You left the door open notifications                       #
+########################################################################################## 
+- alias: v20
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_entrance     
+    to: 'on'
+    for:
+      minutes: 10
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the front door open'
+##########################################################################################      
+##Kitchen Door
+##########################################################################################      
+- alias: v21
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door     
+    to: 'on'
+    for:
+      minutes: 10
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the kitchen door open'
+##########################################################################################        
+##Deck Door
+##########################################################################################      
+- alias: v22
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deck_door     
+    to: 'on'
+    for:
+      minutes: 10
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the deck door open'
+##########################################################################################        
+##Front Door
+##########################################################################################      
+- alias: v23
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.front_door     
+    to: 'on'
+    for:
+      minutes: 10
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the front door open'
+##########################################################################################        
+##Basement Door
+##########################################################################################      
+- alias: v24
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement_door     
+    to: 'on'
+    for:
+      minutes: 30
+  condition:
+    condition: state
+    entity_id: input_boolean.vacation
+    state: 'on'
+  action:
+    service: notify.smsboth
+    data:
+      title: "Sentinel"
+      message: 'Someone left the basement window open' 
+#Keep lights off      
+- alias: v25
+  initial_state: off
+  trigger:
+    platform: state
+    entity_id: group.all_lights     
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.vacation
+        state: 'on'
+      - condition: time
+        after: '00:00:00'
+      - condition: time
+        before: '19:00:00' 
+  action:
+    service: light.turn_off
+    entity_id: group.all_lights

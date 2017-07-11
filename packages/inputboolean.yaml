@@ -21,16 +21,10 @@
     initial: off
     #on means armed, off means disarmed
     
-  kitchenmotion:
-    name: kitchenmotion
-    initial: off
-    
   basementmotion:
     name: basementmotion
     initial: off
-  deckdoor:
-    name: deckdoor
-    initial: off
+
   vacation:
     name: vacation
     initial: off
