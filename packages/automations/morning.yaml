@@ -73,3 +73,41 @@
       title: "Time to go!"
       message: >
         It will take {{ states("sensor.morning_commute_rory") }} minutes to get to work.
+        
+- alias: kitchen door on
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus 
+        state: 'on'
+      - condition: time
+        after: '05:00:00'
+        before: '08:00:00'    
+  action:
+    service: light.turn_on
+    entity_id: light.kitchen_door  
+    
+- alias: kitchen door off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kitchen
+    to: 'off'
+    for:
+      minutes: 1 
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus 
+        state: 'on'
+      - condition: time
+        after: '05:00:00'
+        before: '08:00:00'
+  action:
+    service: light.turn_off
+    entity_id: light.kitchen_door    

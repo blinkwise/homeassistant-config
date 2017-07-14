@@ -69,6 +69,10 @@
     - service: climate.set_temperature
       data:
         temperature: 65
+    - service: light.turn_on
+      entity_id: light.mancave_led
+      data:
+        rgb_color: 36,255,22
 ##########################################################################################
 - alias: mancave comfort off
   trigger:
@@ -90,9 +94,13 @@
         entity_id: sensor.dark_sky_temperature
         above: 65
   action:
-    service: climate.SET_HOLD_MODE
-    data:
-      hold_mode: home
+    - service: climate.SET_HOLD_MODE
+      data:
+        hold_mode: home
+    - service: light.turn_on
+      entity_id: light.mancave_led
+      data:
+        rgb_color: 255,17,16
 ##########################################################################################
 - alias: set lights green if bart gets on xbox
   trigger:

@@ -129,6 +129,31 @@
       icon: mdi:printer-3d
     binary_sensor.octoprint_printing_error:
       icon: mdi:printer-3d
+      
+#Emulated Hue Components
+    input_boolean.alarmstatus:
+      icon: mdi:security-home
+      emulated_hue: true
+      emulated_hue_name: "shields"
+    switch.doorbell_chime:
+      icon: mdi:bell-ring
+      emulated_hue: true
+      emulated_hue_name: "doorbell"
+    switch.front_alcove:
+      icon: mdi:alarm-light
+      emulated_hue: true
+      emulated_hue_name: "front alcove"
+    switch.stair_alcove:
+      icon: mdi:alarm-light
+      emulated_hue: true
+      emulated_hue_name: "stair alcove"
+    switch.workshop:
+      icon: mdi:wrench
+      emulated_hue: true
+      emulated_hue_name: "workshop lights"
+    remote.harmony_hub:
+      emulated_hue: true
+      emulated_hue_name: "the TV"
     
       
       

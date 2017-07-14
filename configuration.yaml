@@ -57,7 +57,11 @@ panel_custom:
     sidebar_icon: mdi:home
     url_path: floorplan
     config: !include floorplan.yaml
-  
+
+emulated_hue:
+  type: alexa
+  listen_port: 8300
+  expose_by_default: false  
     
 # Checks for available updates
 updater:
@@ -82,10 +86,10 @@ input_boolean: !include packages/inputboolean.yaml
 #  client_id: !secret googlecalendarID
 #  client_secret: !secret googlecalendarSECRET
   
-#remote:
-#  - platform: harmony
-#    name: Harmony
-#    host: !secret harmonyhost
+remote:
+  - platform: harmony
+    name: harmony_hub
+    activity: Watch Apple TV
 
 device_sun_light_trigger:
   light_group: group.livingroomlights

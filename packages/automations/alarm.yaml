@@ -91,15 +91,6 @@
     entity_id: alarm_control_panel.sentinel
     to: 'disarmed'
   action:
-    - service: script.turn_off
-      data:
-        entity_id: script.light_loop1
-    - service: script.turn_off
-      data:
-        entity_id: script.light_loop2
-    - service: script.turn_off
-      data:
-        entity_id: script.panic
     - service: light.turn_on
       data:
         entity_id: group.all_lights
@@ -190,9 +181,12 @@
       data:
         title: "Sentinel"
         message: 'Kitchen entrance opened!'
-    - service: script.turn_on
+    - service: light.turn_on
       data:
-        entity_id: script.panic
+        entity_id: group.all_lights
+    - service: homeassistant.turn_on
+      data:
+        entity_id: group.all_switches
 ##########################################################################################        
 ##Deck Door
 ##########################################################################################      
@@ -210,9 +204,12 @@
       data:
         title: "Sentinel"
         message: 'Deck entrance opened!'
-    - service: script.turn_on
+    - service: light.turn_on
       data:
-        entity_id: script.panic
+        entity_id: group.all_lights
+    - service: homeassistant.turn_on
+      data:
+        entity_id: group.all_switches
 ##########################################################################################        
 ##Front Door
 ##########################################################################################      
@@ -230,9 +227,12 @@
       data:
         title: "Sentinel"
         message: 'Front entrance opened!'
-    - service: script.turn_on
+    - service: light.turn_on
       data:
-        entity_id: script.panic
+        entity_id: group.all_lights
+    - service: homeassistant.turn_on
+      data:
+        entity_id: group.all_switches
 ##########################################################################################        
 ##Basement Door
 ##########################################################################################      
@@ -250,9 +250,12 @@
       data:
         title: "Sentinel"
         message: 'Basement Door opened!'
-    - service: script.turn_on
+    - service: light.turn_on
       data:
-        entity_id: script.panic
+        entity_id: group.all_lights
+    - service: homeassistant.turn_on
+      data:
+        entity_id: group.all_switches
 ##########################################################################################        
 ##Basement Window
 ##########################################################################################      
@@ -270,9 +273,12 @@
       data:
         title: "Sentinel"
         message: 'Basement window opened!'
-    - service: script.turn_on
+    - service: light.turn_on
       data:
-        entity_id: script.panic
+        entity_id: group.all_lights
+    - service: homeassistant.turn_on
+      data:
+        entity_id: group.all_switches
 ##########################################################################################        
 ##Doorbell Chime
 ##########################################################################################      
@@ -378,9 +384,12 @@
 ##########################################################################################       
 - alias: Turn off alarm with front_entrance motion 
   trigger:
-    platform: state
-    entity_id: binary_sensor.front_entrance     
-    to: 'on'
+    - platform: state
+      entity_id: binary_sensor.front_entrance
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.kitchen
+      to: 'on'
   condition:
     condition: and
     conditions:
@@ -389,6 +398,7 @@
         state: 'on'
       - condition: time
         after: '05:00:00'
+        before: '08:00:00'
       - condition: state
         entity_id:  input_boolean.alarmstatus
         state: 'on'
@@ -411,6 +421,7 @@
         state: 'on'
       - condition: time
         after: '22:00:00'
+        before: '08:00:00'
       - condition: state
         entity_id:  input_boolean.alarmstatus
         state: 'off'

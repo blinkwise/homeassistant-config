@@ -101,6 +101,8 @@
       - light.man_cave_1
       - light.man_cave_2
       - light.lightsaber
+      - light.bloom_1
+      - light.bloom_2
   mancave_scenes:
     name: Mancave Scenes
     entities:
@@ -118,7 +120,7 @@
     name: Stellar Cartography
     entities:
       - media_player.stellar_cartography
-      - remote.harmony
+      - remote.harmony_hub
       - configurator.plex_media_server
       - light.mantle_center
       - light.hall_3

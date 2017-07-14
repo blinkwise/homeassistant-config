@@ -364,7 +364,7 @@
       entity_id: input_boolean.alarmstatus
       state: 'off'
     - condition: time
-    - before: '23:00:00'
+      before: '23:00:00'
     - service: light.turn_on
       data:
         entity_id: group.huelights
