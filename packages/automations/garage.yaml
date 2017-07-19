@@ -1,0 +1,161 @@
+######################################################
+#                 Rory Garage                        #
+######################################################
+
+##########################################################################################    
+#Protected by test if garage is empty
+- alias: open garage door when rory gets home
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: light.kitchen_door
+    to: 'on'   
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.debug 
+        state: 'off' 
+      - condition: state
+        entity_id: sensor.garage_car_present 
+        state: 'no' 
+      - condition: state
+        entity_id: input_boolean.roryhome 
+        state: 'off' 
+      - condition: state
+        entity_id: sensor.garage_status
+        state: "Closed"
+  action: 
+    service: cover.open_cover
+    data:
+      entity_id: cover.escape 
+##########################################################################################
+#protected by checking if Rory just got home
+- alias: close garage door when rory gets home
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door
+    to: 'on'   
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.debug 
+        state: 'off' 
+      - condition: template
+        value_template: '{{(as_timestamp(now())-as_timestamp(states.input_boolean.roryhome.last_updated)) | int < 300 }}'
+      - condition: state
+        entity_id: input_boolean.roryhome 
+        state: 'on' 
+      - condition: state
+        entity_id: sensor.garage_status
+        state: "Open"
+  action: 
+    service: cover.open_cover
+    data:
+      entity_id: cover.escape
+##########################################################################################
+#protected by time window of 6:40 am to 7 am M-F
+- alias: open garage door in morning
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door
+    to: 'on'   
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.debug 
+        state: 'off' 
+      - condition: time
+        before: '07:00:00'
+        after: '06:40:00'
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+      - condition: state
+        entity_id: sensor.garage_car_present 
+        state: 'yes' 
+      - condition: state
+        entity_id: input_boolean.roryhome 
+        state: 'on' 
+      - condition: state
+        entity_id: sensor.garage_status
+        state: "Closed"
+  action: 
+    service: cover.open_cover
+    data:
+      entity_id: cover.escape
+##########################################################################################
+- alias: close garage door if open and I am not home
+  initial_state: 'on'
+  trigger:
+    platform: time
+    minutes: '/5'
+    seconds: 00      
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.debug 
+        state: 'off' 
+      - condition: state
+        entity_id: sensor.garage_status
+        state: "Open"
+        for:
+          minutes: 5
+      - condition: state
+        entity_id: input_boolean.roryhome 
+        state: 'off' 
+      - condition: state
+        entity_id: alarm_control_panel.sentinel
+        state: 'armed_home'  
+  action: 
+    service: cover.close_cover
+    data:
+      entity_id: cover.escape  
+##########################################################################################
+- alias: close garage door if open immediately at night
+  initial_state: 'on'
+  trigger:
+    platform: time
+    minutes: '/5'
+    seconds: 00    
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.debug 
+        state: 'off' 
+      - condition: time
+        before: '06:00:00'
+        after: '00:00:00'
+      - condition: state
+        entity_id: sensor.garage_status
+        state: "Open"
+      - condition: state
+        entity_id: alarm_control_panel.sentinel
+        state: 'armed_home'     
+  action: 
+    service: cover.close_cover
+    data:
+      entity_id: cover.escape       
+        
+##########################################################################################        
+- alias: close garage door if open immediately at night
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: input_boolean.debug
+    to: "off"    
+  action: 
+    service: cover.close_cover
+    data:
+      entity_id: cover.escape       
+                
+  

@@ -53,7 +53,7 @@
     value_template: '{{ value_json.temperature | round(1) }}'
 ####################################################################################
 ####################################################################################
-#                         Livingroom Sensor                                          #
+#                         Livingroom Sensor                                        #
 ####################################################################################
   - platform: mqtt  
     state_topic: "bruh/sensornodelivingroom"  
@@ -206,9 +206,42 @@
     password: !secret amcrestpass
     monitored_conditions:
       - motion_detector
+####################################################################################
+#                         Garage Door ensor                                        #
+####################################################################################
 
-
-
+  - platform: template
+    sensors:
+      garage_status:
+        friendly_name: 'Escape Door Status'
+        value_template: '{% if states.cover.escape %}
+            {% if states.cover.escape.attributes["door_state"] == "open" %}
+              Open
+            {% elif states.cover.escape.attributes["door_state"] == "closed" %}
+              Closed
+            {% elif states.cover.escape.attributes["door_state"] == "opening" %}
+              Opening
+            {% elif states.cover.escape.attributes["door_state"] == "closing" %}
+              Closing
+            {% else %}
+              Unknown
+            {% endif %}
+            {% else %}
+              n/a
+            {% endif %}'
+      garage_car_present:
+        friendly_name: 'Escape in Garage'
+        value_template: '{% if states.cover.escape %}
+            {% if states.cover.escape.state == "open" %}
+              n/a
+            {% elif ((states.cover.escape.attributes["distance_sensor"] > 50) and (states.cover.escape.attributes["distance_sensor"] < 120)) %}
+              Yes
+            {% else %}
+              No
+            {% endif %}
+            {% else %}
+             n/a
+            {% endif %}'
 
 
 

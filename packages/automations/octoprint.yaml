@@ -3,6 +3,7 @@
 ######################################################
 ##########################################################################################      
   - alias: Send me a notification when the print is above 50%
+    initial_state: 'on'
     trigger:
       platform: numeric_state
       entity_id: sensor.octoprint_job_percentage
@@ -13,6 +14,7 @@
         message: "Print is at 50%" 
 ##########################################################################################        
   - alias: Send me a notification when the print is finished
+    initial_state: 'on'
     trigger:
       platform: state
       entity_id: sensor.octoprint_current_state

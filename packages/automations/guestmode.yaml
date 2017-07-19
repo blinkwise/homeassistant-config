@@ -1,0 +1,192 @@
+######################################################
+#                 Vacation                           #
+######################################################
+##########################################################################################     
+#Turn off alarm if guest mode on
+- alias: G0 
+  initial_state: 'off'
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarmstatus
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.guestmode 
+        state: 'on' 
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.sentinel
+      data: 
+        code: !secret alarmcode
+      
+##########################################################################################
+# Turn on fake alarm with guest mode
+- alias: G1
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id:  input_boolean.guestmode 
+    to: 'on'
+  action:
+    - service: notify.sms
+      data_template:
+        title: "Fake Sentinel"
+        message: >
+          Fake Alarm has armed!
+    - service: homeassistant.turn_on
+      entity_id: automation.G3
+    - service: homeassistant.turn_on
+      entity_id: automation.G0
+    - service: homeassistant.turn_on
+      entity_id: automation.G4
+    - service: homeassistant.turn_off
+      entity_id: automation.home_away
+      
+#Turn off fake alarm with guest mode      
+- alias: G2
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id:  input_boolean.guestmode 
+    to: 'off'
+  action:
+    - service: notify.sms
+      data_template:
+        title: "Fake Sentinel"
+        message: >
+          Fake Alarm has disarmed!
+    - service: homeassistant.turn_off
+      entity_id: automation.G3
+    - service: homeassistant.turn_off
+      entity_id: automation.G0
+    - service: homeassistant.turn_off
+      entity_id: automation.G4
+    - service: homeassistant.turn_on
+      entity_id: automation.home_away
+      
+      
+
+- alias: G3
+  initial_state: 'off'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.basement, binary_sensor.basement_door, binary_sensor.basement_window, binary_sensor.deck_door, binary_sensor.front_door, binary_sensor.front_entrance, binary_sensor.garage_door, binary_sensor.kitchen, binary_sensor.livingroom
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.guestmode 
+        state: 'on' 
+      - condition: state
+        entity_id: input_boolean.alarmstatus 
+        state: 'on' 
+  action:
+    service: notify.sms
+    data_template:
+      title: "Fake Sentinel"
+      message: >
+        Fake Alarm has been triggered!
+ ######################################################
+#                 Alex Notify                       #
+######################################################
+
+##########################################################################################  
+- alias: Notify when guest gets home
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: input_boolean.guesthome
+    from: 'off'
+    to: 'on'
+  action:
+    service: notify.sms
+    data:
+      message: 'Guest is now home'
+##########################################################################################
+- alias: Notify when guest leaves
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: input_boolean.guesthome
+    from: 'on'
+    to: 'off'
+  action:
+    service: notify.sms
+    data:
+      message: 'Guest left home'
+##########################################################################################  
+- alias: 'Alex Home'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.alex
+      to: 'home'
+  condition:
+    condition: state
+    entity_id: input_boolean.guesthome
+    state: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.guesthome
+
+- alias: 'Alex Away'
+  initial_state: 'on'  
+  trigger:
+    - platform: state
+      entity_id: device_tracker.alex
+      to: 'not_home'
+      for: 
+        minutes: 10
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.alex
+        state: 'not_home'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.guesthome
+      
+- alias: G4
+  initial_state: 'off'       
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tracyhome
+      to: 'off'
+    - platform: state
+      entity_id: input_boolean.roryhome
+      to: 'off' 
+    - platform: state
+      entity_id: input_boolean.alexhome
+      to: 'off'        
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.homestatus
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.roryhome
+        state: 'off' 
+      - condition: state
+        entity_id: input_boolean.tracyhome
+        state: 'off'       
+      - condition: state
+        entity_id: input_boolean.guesthome
+        state: 'off' 
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.homestatus
+    - service: notify.sms
+      data:
+        message: 'Home Set to away'
+    - service: logbook.log
+      data_template:
+        name: "Home away: "
+        message: >-
+          {%- for state in states if state.entity_id == trigger.entity_id -%}
+            {{ state.attributes.friendly_name }} is Away.
+          {%- endfor -%} 

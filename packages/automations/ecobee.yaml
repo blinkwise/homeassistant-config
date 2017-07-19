@@ -3,6 +3,7 @@
 ######################################################
 ##########################################################################################
 - alias: home comfort home
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.homestatus
@@ -17,6 +18,7 @@
         message: 'Ecobee set to home'     
 ##########################################################################################
 - alias: home comfort sleep
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.alarmstatus
@@ -37,6 +39,7 @@
         hold_mode: 'sleep'        
 ##########################################################################################
 - alias: home comfort away
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.homestatus
@@ -51,6 +54,7 @@
         message: 'Ecobee set to away'       
 ##########################################################################################
 - alias: home comfort away
+  initial_state: 'on'
   trigger:
     - platform: time
     # You can also match on interval. This will match every 5 minutes
@@ -68,6 +72,7 @@
         
 ##########################################################################################
 - alias: home comfort AC
+  initial_state: 'on'
   trigger:
     platform: numeric_state
     entity_id: sensor.dark_sky_temperature
@@ -86,6 +91,7 @@
         message: 'Ecobee set to cool'        
 ##########################################################################################
 - alias: home comfort heat
+  initial_state: 'on'
   trigger:
     platform: numeric_state
     entity_id: sensor.dark_sky_temperature

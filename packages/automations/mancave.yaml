@@ -4,6 +4,7 @@
 
 ##########################################################################################
 - alias: turn on the mancave lights
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.mancave
@@ -14,6 +15,7 @@
     entity_id: group.mancave
 ##########################################################################################    
 - alias: mancave home
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: sensor.mancave_pir
@@ -28,6 +30,7 @@
     entity_id: input_boolean.mancave 
 ##########################################################################################
 - alias: mancave away
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: group.mancave
@@ -44,6 +47,7 @@
         hold_mode: 'home'        
 ##########################################################################################
 - alias: mancave comfort
+  initial_state: 'on'
   trigger:
     - platform: time
     # You can also match on interval. This will match every 5 minutes
@@ -75,6 +79,7 @@
         rgb_color: 36,255,22
 ##########################################################################################
 - alias: mancave comfort off
+  initial_state: 'on'
   trigger:
     - platform: time
     # You can also match on interval. This will match every 5 minutes
@@ -103,6 +108,7 @@
         rgb_color: 255,17,16
 ##########################################################################################
 - alias: set lights green if bart gets on xbox
+  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: sensor.a_hope_unseen
@@ -116,7 +122,26 @@
       data:
         group_name: "Man Cave"
         scene_name: "Xbox" 
-        
+##########################################################################################
+- alias: turn on multisensor led w/ motion in man cave
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: sensor.mancave_pir      
+    to: 'motion detected'
+  action:
+    service: light.turn_on
+    entity_id: light.mancave_led
+##########################################################################################
+- alias: turn off multisensor led w/ motion in man cave
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: sensor.mancave_pir      
+    to: 'standby'
+  action:
+    service: light.turn_off
+    entity_id: light.mancave_led        
         
         
         

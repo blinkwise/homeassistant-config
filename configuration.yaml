@@ -85,7 +85,13 @@ input_boolean: !include packages/inputboolean.yaml
 #google:
 #  client_id: !secret googlecalendarID
 #  client_secret: !secret googlecalendarSECRET
-  
+cover:
+  platform: opengarage
+  covers:
+      garage:
+        host:  192.168.0.117
+        device_key: sperare
+        name:  escape
 remote:
   - platform: harmony
     name: harmony_hub
@@ -315,11 +321,19 @@ camera:
   - platform: mjpeg
     mjpeg_url: !secret octomjpeg_url
     name: Replicator
+    
   - platform: amcrest
-    host: !secret amcrestip
+    name: front entrance
+    
+amcrest:
+  - host: !secret amcrestip
     username: !secret amcrestusername
     password: !secret amcrestpass
-    name: Front Entrance
+    name: "Front Entrance"
+    resolution: high
+    stream_source: mjpeg
+    sensors:
+      - motion_detector
 
 
 

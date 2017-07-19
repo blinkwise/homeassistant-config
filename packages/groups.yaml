@@ -5,12 +5,14 @@
   default_view:  
     view: yes
     entities: 
-      - group.sentinel
+      - group.garage
+      - group.controlpanel
       - group.family_view
-      - group.lightpanel 
+      - group.homestatus 
       - group.planetary
       - group.lifesupport
-      - group.mainframe
+
+
 ###################################################
 #                    Views                        #
 ###################################################
@@ -22,6 +24,7 @@
       - group.brandtly
       - switch.doorbell_chime
       - group.frontdoorcam
+      - group.mainframe
       
   Office-Mancave_view:
     view: yes
@@ -181,8 +184,9 @@
       - sensor.Mancave_humidity     
       - sensor.Mainframe_humidity   
       - sensor.Livingroom_humidity  
-  lightpanel:
-    name: Light Panel
+  homestatus:
+    name: Home Status
+    control: hidden
     entities: 
       - group.bedroom
       - group.livingroom
@@ -190,6 +194,7 @@
       - group.mancave
       - group.brandtly
       - switch.front_alcove
+      - alarm_control_panel.sentinel
   brandtly:
     name: Home
     entities:
@@ -207,14 +212,11 @@
     entities:
       - input_boolean.roryhome
       - input_boolean.tracyhome
+      - input_boolean.guesthome
       - input_boolean.homestatus
       - input_boolean.alarmstatus
 #      - device_tracker.tracysapplewatch
 #      - device_tracker.rorysapplewatch
-  sentinel:
-    name: Sentinel
-    entities:
-      - alarm_control_panel.sentinel
   alarmcard:
     name: Sentinel Alarm_View
     entities:
@@ -343,8 +345,19 @@
       - automation.v23
       - automation.v24   
       - automation.v25 
-      - automation.v26      
-      
+      - automation.v26   
+  garage:     
+    name: Garage
+    entities:
+      - cover.escape
+      - sensor.garage_status
+      - sensor.garage_car_present      
+  controlpanel:
+    name: Control Panel
+    control: hidden
+    entities:
+      - input_boolean.debug
+      - input_boolean.guestmode
       
       
       

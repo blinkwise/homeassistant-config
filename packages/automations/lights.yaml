@@ -4,6 +4,7 @@
 
 ##########################################################################################
 - alias: turn on the kitchen lights
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.roryhome
@@ -14,6 +15,7 @@
     entity_id: light.kitchen
 ##########################################################################################
 - alias: turn on the kitchen lights tracy
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.tracyhome
@@ -27,6 +29,7 @@
     entity_id: light.kitchen
 ##########################################################################################    
 - alias: turn on the livingroom lights when home
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.homestatus
@@ -46,6 +49,7 @@
 ######################################################
 ##########################################################################################
 - alias: turn on front porch lights
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.roryhome, input_boolean.tracyhome
@@ -66,6 +70,7 @@
 ##########################################################################################
 ##########################################################################################    
 - alias: Turn off basement light 3 minutes after door closed
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: binary_sensor.basement_door 
@@ -84,6 +89,7 @@
 ######################################################
 ##########################################################################################      
 - alias: Turn off Lights when everyone leaves
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: input_boolean.homestatus
@@ -96,6 +102,7 @@
 #                 Octoprint light automation         #
 ######################################################
 - alias: Turn on light while printing
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: sensor.octoprint_current_state
@@ -105,6 +112,7 @@
     entity_id: switch.workshop
     
 - alias: Turn off light while not printing
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: sensor.octoprint_current_state
@@ -118,6 +126,7 @@
 #                 Hall light automation              #
 ######################################################    
 - alias: Turn on hall light at night
+  initial_state: 'on'
   trigger:
     platform: sun
     event: sunset
@@ -137,6 +146,7 @@
       entity_id: switch.front_alcove
 ##########################################################################################
 - alias: Media Turn off hall lights if livingroom on
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: group.stellar
@@ -148,6 +158,7 @@
       entity_id: switch.front_alcove
 ##########################################################################################
 - alias: Turn on hall lights if livingroom off
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: group.stellar
@@ -162,6 +173,7 @@
       entity_id: switch.front_alcove    
     
 - alias: kitchen door on
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: binary_sensor.garage_door
@@ -171,6 +183,7 @@
     entity_id: light.kitchen_door  
     
 - alias: kitchen door off
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: binary_sensor.garage_door

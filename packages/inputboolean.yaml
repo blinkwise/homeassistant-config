@@ -5,6 +5,10 @@
   tracyhome:
     name: Tracy Henegar
     initial: off
+
+  guesthome:
+    name: Guest
+    initial: off
     
   homestatus:
     name: Home Status
@@ -29,3 +33,11 @@
     name: vacation
     initial: off
     
+  debug:
+    name: debug
+    initial: on
+ 
+  guestmode:
+    name: guestmode
+    initial: off
+

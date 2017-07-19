@@ -3,6 +3,7 @@
 ######################################################
 ##########################################################################################     
 - alias: Morning text pollen
+  initial_state: 'on'
   trigger:
     platform: time
     at: '10:00:00'
@@ -11,7 +12,8 @@
       data:
         message: "The allergy level is {{ states.sensor.pollen_level.state }}."
 ##########################################################################################  
-- alias: Morning report 
+- alias: Morning report
+  initial_state: 'on' 
   trigger:
     platform: time
     at: '06:15:00'
@@ -41,6 +43,7 @@
 #        title: "."
 #        message: "You have to leave by {{ (as_timestamp(now.now()) - states.sensor.morning_commute_rory.attributes.duration.split(" ")[0] | int *60 ) | timestamp_custom("%Y-%m-%d %H:%M") }}"
 - alias: Morning text pollen brennan
+  initial_state: 'on'
   trigger:
     platform: time
     at: '6:30:00'
@@ -75,6 +78,7 @@
         It will take {{ states("sensor.morning_commute_rory") }} minutes to get to work.
         
 - alias: kitchen door on
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: binary_sensor.kitchen
@@ -93,6 +97,7 @@
     entity_id: light.kitchen_door  
     
 - alias: kitchen door off
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: binary_sensor.kitchen
@@ -105,9 +110,6 @@
       - condition: state
         entity_id: input_boolean.homestatus 
         state: 'on'
-      - condition: time
-        after: '05:00:00'
-        before: '08:00:00'
   action:
     service: light.turn_off
     entity_id: light.kitchen_door    

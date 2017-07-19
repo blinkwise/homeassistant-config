@@ -5,12 +5,27 @@
     climate.lifesupport:
       friendly_name: Life Support
       entity_picture: /local/lifesupport.png
+#Humidity
     sensor.lifesupport_humidity:
       friendly_name: Humidity
       entity_picture: /local/humid.png
+    sensor.livingroom_humidity:
+      entity_picture: /local/humid.png
+    sensor.mainframe_humidity:
+      entity_picture: /local/humid.png
+    sensor.mancave_humidity:
+      entity_picture: /local/humid.png     
+#temperature      
     sensor.lifesupport_temperature:
       friendly_name: Temperature
       entity_picture: /local/temperature.png
+    sensor.livingroom_temperature:
+      entity_picture: /local/temperature.png
+    sensor.mainframe_temperature:
+      entity_picture: /local/temperature.png
+    sensor.mancave_temperature:
+      entity_picture: /local/temperature.png
+#----------------------------------------------
     sensor.dark_sky_temperature:
       friendly_name: Temperature
     sensor.dark_sky_apparent_temperature:
@@ -129,6 +144,14 @@
       icon: mdi:printer-3d
     binary_sensor.octoprint_printing_error:
       icon: mdi:printer-3d
+    cover.escape:
+      friendly_name: Escape
+      entity_picture: /local/escape.jpg
+    sensor.garage_car_present:
+      icon: mdi:car
+    input_boolean.debug:
+      icon: mdi:android-debug-bridge
+      
       
 #Emulated Hue Components
     input_boolean.alarmstatus:
@@ -154,6 +177,10 @@
     remote.harmony_hub:
       emulated_hue: true
       emulated_hue_name: "the TV"
+    input_boolean.guestmode:
+      icon: mdi:account-alert
+      emulated_hue: true
+      emulated_hue_name: "guest mode"
     
       
       
